@@ -144,7 +144,20 @@ const Storage = {
   }
 };
 
-// 6. Application State
+// 6. Application State & Supabase Official Cloud Configuration
+const DEFAULT_SUPABASE = {
+  url: 'https://kvhrbgnxajdyvepmwbbr.supabase.co',
+  key: 'sb_publishable_hJt94SGfzM0YfbsZCU1xXg_Lc2xQbO_',
+  connected: true
+};
+
+const savedSupabase = Storage.get('asa_supabase', DEFAULT_SUPABASE);
+if (!savedSupabase || !savedSupabase.url || !savedSupabase.key) {
+  savedSupabase.url = DEFAULT_SUPABASE.url;
+  savedSupabase.key = DEFAULT_SUPABASE.key;
+  savedSupabase.connected = true;
+}
+
 const state = {
   page: 'dashboard',
   students: Storage.get('asa_students', defaultStudents),
@@ -153,13 +166,289 @@ const state = {
   bans: Storage.get('asa_bans', defaultBans),
   entities: Storage.get('asa_entities', defaultEntities),
   users: Storage.get('asa_users', defaultUsers),
-  supabase: Storage.get('asa_supabase', { url: '', key: '', connected: false }),
+  supabase: savedSupabase,
   importedRows: [],
   currentRole: 'admin'
 };
 
 const $ = (s, p = document) => p.querySelector(s);
 const $$ = (s, p = document) => [...p.querySelectorAll(s)];
+
+// Supabase Direct Cloud Synchronization Engine
+const Supabase = {
+  getUrl() { return (state.supabase && state.supabase.url) || DEFAULT_SUPABASE.url; },
+  getKey() { return (state.supabase && state.supabase.key) || DEFAULT_SUPABASE.key; },
+  isConnected() { return !!(this.getUrl() && this.getKey() && state.supabase && state.supabase.connected !== false); },
+
+  async req(method, path, body = null) {
+    if (!this.isConnected()) return null;
+    try {
+      const u = this.getUrl().replace(/\/+$/, '') + path;
+      const headers = {
+        'apikey': this.getKey(),
+        'Authorization': `Bearer ${this.getKey()}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates,return=representation'
+      };
+      const res = await fetch(u, {
+        method,
+        headers,
+        body: body ? JSON.stringify(body) : undefined
+      });
+      if (!res.ok) {
+        console.warn('Supabase request notice:', res.status, res.statusText);
+        return null;
+      }
+      const text = await res.text();
+      return text ? JSON.parse(text) : [];
+    } catch (err) {
+      console.warn('Supabase fetch error:', err);
+      return null;
+    }
+  },
+
+  async pullAll() {
+    if (!this.isConnected()) return false;
+    try {
+      const [supRows, stuRows, evRows, attRows, banRows] = await Promise.all([
+        this.req('GET', '/rest/v1/supervisors?select=*'),
+        this.req('GET', '/rest/v1/students?select=*'),
+        this.req('GET', '/rest/v1/events?select=*'),
+        this.req('GET', '/rest/v1/event_attendance?select=*'),
+        this.req('GET', '/rest/v1/bans?select=*')
+      ]);
+
+      let hasRemoteData = false;
+
+      if (supRows && supRows.length > 0) {
+        state.supervisors = supRows.map(r => ({
+          id: r.id,
+          name: r.name,
+          role: r.role,
+          phone: r.phone,
+          faculty: r.faculty,
+          status: r.status
+        }));
+        hasRemoteData = true;
+      }
+
+      if (stuRows && stuRows.length > 0) {
+        state.students = stuRows.map(r => ({
+          id: r.id,
+          national: r.national_id,
+          name: r.name,
+          faculty: r.faculty,
+          year: r.academic_year,
+          phone: r.phone,
+          status: r.status,
+          entities: r.entities || []
+        }));
+        hasRemoteData = true;
+      }
+
+      if (evRows && evRows.length > 0) {
+        state.events = evRows.map(r => {
+          const matchingAtt = (attRows || []).filter(a => a.event_id === r.id);
+          return {
+            id: r.id,
+            title: r.title,
+            date: r.date_str,
+            place: r.place,
+            registered: r.registered_target,
+            days: r.days_count,
+            supervisorIds: r.supervisor_ids || [],
+            organizer: r.organizer,
+            status: r.status,
+            attendeeIds: matchingAtt.map(a => a.student_id)
+          };
+        });
+        hasRemoteData = true;
+      }
+
+      if (banRows && banRows.length > 0) {
+        state.bans = banRows.map(r => ({
+          id: r.id,
+          studentId: r.student_id,
+          student: r.student_name,
+          faculty: r.faculty,
+          national: r.national_id,
+          type: r.ban_type,
+          reason: r.reason,
+          from: r.from_date,
+          to: r.to_date,
+          by: r.issued_by,
+          active: r.is_active
+        }));
+        hasRemoteData = true;
+      }
+
+      if (hasRemoteData) {
+        Storage.saveAll();
+        renderStudents();
+        renderEvents();
+        renderSupervisors();
+        renderBans();
+        updateDashboardStats();
+      }
+      return true;
+    } catch (err) {
+      console.warn('pullAll failed:', err);
+      return false;
+    }
+  },
+
+  async pushAll() {
+    if (!this.isConnected()) return false;
+    try {
+      for (const s of state.supervisors) {
+        await this.req('POST', '/rest/v1/supervisors', {
+          id: s.id,
+          name: s.name,
+          role: s.role,
+          phone: s.phone,
+          faculty: s.faculty,
+          status: s.status
+        });
+      }
+      for (const st of state.students) {
+        await this.req('POST', '/rest/v1/students?on_conflict=national_id', {
+          id: st.id,
+          national_id: st.national,
+          name: st.name,
+          faculty: st.faculty,
+          academic_year: st.year,
+          phone: st.phone,
+          status: st.status,
+          entities: st.entities || []
+        });
+      }
+      for (const e of state.events) {
+        await this.req('POST', '/rest/v1/events?on_conflict=id', {
+          id: e.id,
+          title: e.title,
+          date_str: e.date,
+          place: e.place,
+          registered_target: e.registered,
+          days_count: e.days,
+          supervisor_ids: e.supervisorIds || [],
+          organizer: e.organizer,
+          status: e.status
+        });
+        for (const sid of (e.attendeeIds || [])) {
+          await this.req('POST', '/rest/v1/event_attendance?on_conflict=event_id,student_id', {
+            event_id: e.id,
+            student_id: sid,
+            attendance_status: 'حاضر'
+          });
+        }
+      }
+      for (const b of state.bans) {
+        await this.req('POST', '/rest/v1/bans', {
+          student_id: b.studentId,
+          student_name: b.student,
+          faculty: b.faculty,
+          national_id: b.national,
+          ban_type: b.type,
+          reason: b.reason,
+          from_date: b.from,
+          to_date: b.to,
+          issued_by: b.by,
+          is_active: b.active
+        });
+      }
+      return true;
+    } catch (err) {
+      console.warn('pushAll failed:', err);
+      return false;
+    }
+  },
+
+  async syncStudent(st) {
+    if (!this.isConnected() || !st) return;
+    return this.req('POST', '/rest/v1/students?on_conflict=national_id', {
+      id: st.id,
+      national_id: st.national,
+      name: st.name,
+      faculty: st.faculty,
+      academic_year: st.year,
+      phone: st.phone,
+      status: st.status,
+      entities: st.entities || []
+    });
+  },
+
+  async deleteStudent(id) {
+    if (!this.isConnected()) return;
+    return this.req('DELETE', `/rest/v1/students?id=eq.${id}`);
+  },
+
+  async syncEvent(e) {
+    if (!this.isConnected() || !e) return;
+    await this.req('POST', '/rest/v1/events?on_conflict=id', {
+      id: e.id,
+      title: e.title,
+      date_str: e.date,
+      place: e.place,
+      registered_target: e.registered,
+      days_count: e.days,
+      supervisor_ids: e.supervisorIds || [],
+      organizer: e.organizer,
+      status: e.status
+    });
+    if (e.attendeeIds && e.attendeeIds.length) {
+      for (const sid of e.attendeeIds) {
+        await this.req('POST', '/rest/v1/event_attendance?on_conflict=event_id,student_id', {
+          event_id: e.id,
+          student_id: sid,
+          attendance_status: 'حاضر'
+        });
+      }
+    }
+  },
+
+  async deleteEvent(id) {
+    if (!this.isConnected()) return;
+    return this.req('DELETE', `/rest/v1/events?id=eq.${id}`);
+  },
+
+  async syncSupervisor(s) {
+    if (!this.isConnected() || !s) return;
+    return this.req('POST', '/rest/v1/supervisors', {
+      id: s.id,
+      name: s.name,
+      role: s.role,
+      phone: s.phone,
+      faculty: s.faculty,
+      status: s.status
+    });
+  },
+
+  async deleteSupervisor(id) {
+    if (!this.isConnected()) return;
+    return this.req('DELETE', `/rest/v1/supervisors?id=eq.${id}`);
+  },
+
+  async syncBan(b) {
+    if (!this.isConnected() || !b) return;
+    return this.req('POST', '/rest/v1/bans', {
+      student_id: b.studentId,
+      student_name: b.student,
+      faculty: b.faculty,
+      national_id: b.national,
+      ban_type: b.type,
+      reason: b.reason,
+      from_date: b.from,
+      to_date: b.to,
+      issued_by: b.by,
+      is_active: b.active
+    });
+  },
+
+  async deleteBan(id) {
+    if (!this.isConnected()) return;
+    return this.req('DELETE', `/rest/v1/bans?id=eq.${id}`);
+  }
+};
 
 // 7. Normalization & Egyptian Validation Helpers
 function normalizeArabic(value = '') {
@@ -768,6 +1057,7 @@ function deleteStudent(id) {
     renderEvents();
     renderBans();
     toast(`تم حذف الطالب "${s.name}" بنجاح`);
+    Supabase.deleteStudent(id);
   }
 }
 
@@ -844,6 +1134,7 @@ function deleteEvent(id) {
     renderSupervisors();
     updateDashboardStats();
     toast(`تم حذف فاعلية "${e.title}"`);
+    Supabase.deleteEvent(id);
   }
 }
 
@@ -1127,6 +1418,7 @@ function deleteSupervisor(id) {
     renderSupervisors();
     renderEvents();
     toast(`تم حذف المشرف "${s.name}" بنجاح`);
+    Supabase.deleteSupervisor(id);
   }
 }
 
@@ -1493,6 +1785,7 @@ function openForm(type, data = null) {
       renderSupervisors();
       renderEvents();
       toast(isEdit ? 'تم تحديث بيانات المشرف وتثبيت مسماه الوظيفي' : 'تمت إضافة المشرف الجديد وتثبيت مسماه الوظيفي كاقتراح دائم');
+      Supabase.syncSupervisor(isEdit ? s : state.supervisors[state.supervisors.length - 1]);
     };
   }
 
@@ -1811,6 +2104,7 @@ function openForm(type, data = null) {
       renderStudents();
       updateDashboardStats();
       toast(isEdit ? 'تم تحديث بيانات الطالب بنجاح' : 'تمت إضافة الطالب الجديد بنجاح');
+      Supabase.syncStudent(isEdit ? s : state.students[state.students.length - 1]);
     };
   }
 
@@ -1916,6 +2210,7 @@ function openForm(type, data = null) {
       renderSupervisors();
       updateDashboardStats();
       toast(isEdit ? 'تم تحديث الفاعلية' : 'تم إنشاء الفاعلية بنجاح');
+      Supabase.syncEvent(isEdit ? ev : state.events[state.events.length - 1]);
     };
   }
 
@@ -4094,6 +4389,7 @@ function confirmImport() {
   renderStudents();
   renderEvents();
   resetImport();
+  Supabase.pushAll().catch(e => console.warn('Supabase post-import sync:', e));
 
   toast(`تم اعتماد واستيراد ${validRows.length} طالباً بنجاح وربطهم فورياً بفاعلية «${chosenEvent.title}» (${addedCount} طالب جديد، و${updatedCount} تم تحديث بياناتهم، و${keptCount} تم الإبقاء على بياناتهم المعتمدة).`);
 }
@@ -4202,6 +4498,26 @@ ALTER TABLE public.bans ENABLE ROW LEVEL SECURITY;
       </div>
       <div class="full" id="sbTestResultBox"></div>
 
+      <!-- المزامنة السحابية الشاملة -->
+      <div class="full" style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:12px;padding:12px;margin-top:6px">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <strong style="color:#166534;display:flex;align-items:center;gap:6px">
+            <i data-lucide="cloud-lightning"></i> المزامنة السحابية الفورية
+          </strong>
+          <div style="display:flex;gap:8px">
+            <button type="button" class="btn primary sm" id="sbPushAllBtn" style="font-size:11px;font-weight:700">
+              <i data-lucide="upload-cloud"></i> رفع البيانات الحالية إلى Supabase
+            </button>
+            <button type="button" class="btn ghost sm" id="sbPullAllBtn" style="font-size:11px;font-weight:700;border-color:#86efac;color:#166534">
+              <i data-lucide="download-cloud"></i> سحب البيانات من Supabase
+            </button>
+          </div>
+        </div>
+        <p style="font-size:11px;color:#15803d;margin:5px 0 0">
+          يمكنك في أي وقت رفع كافة بيانات الطلاب والأنشطة إلى سحابة Supabase بضغطة زر، أو سحب أحدث نسخة سحابية وتحديث كافة الشاشات على جهازك فورياً.
+        </p>
+      </div>
+
       <!-- تهيئة الاستخدام الرسمي -->
       <div class="full" style="background:#fffbeb;border:1px solid #fef3c7;border-radius:12px;padding:12px;margin-top:6px">
         <div style="display:flex;align-items:center;justify-content:space-between">
@@ -4308,8 +4624,38 @@ ALTER TABLE public.bans ENABLE ROW LEVEL SECURITY;
     state.supabase = { url, key, connected: !!(url && key) };
     Storage.saveAll();
     closeModal();
+    updateCloudBadge();
     toast(state.supabase.connected ? 'تم حفظ إعدادات Supabase وتفعيل الربط السحابي بنجاح' : 'تم تفعيل وضع التخزين المحلي النشط');
   };
+
+  const pushBtn = $('#sbPushAllBtn');
+  if (pushBtn) {
+    pushBtn.onclick = async () => {
+      toast('جاري رفع ونقل البيانات إلى سحابة Supabase...');
+      const ok = await Supabase.pushAll();
+      if (ok) {
+        toast('تم رفع ومزامنة كافة البيانات مع Supabase بنجاح! ☁️');
+        updateCloudBadge();
+      } else {
+        toast('تعذر الرفع، يرجى فحص الاتصال بالإنترنت');
+      }
+    };
+  }
+
+  const pullBtn = $('#sbPullAllBtn');
+  if (pullBtn) {
+    pullBtn.onclick = async () => {
+      toast('جاري سحب أحدث البيانات من سحابة Supabase...');
+      const ok = await Supabase.pullAll();
+      if (ok) {
+        toast('تم سحب أحدث نسخة سحابية وتحديث كافة الشاشات بنجاح! 🔄');
+        updateCloudBadge();
+        closeModal();
+      } else {
+        toast('تعذر سحب البيانات، يرجى فحص الاتصال بالإنترنت');
+      }
+    };
+  }
 
   iconRefresh();
 }
@@ -4832,7 +5178,27 @@ function init() {
   if ($('#btnFacultyReport')) $('#btnFacultyReport').onclick = () => showFacultyReportModal();
   $('#downloadTemplate').onclick = downloadTemplate;
 
+  // Cloud Supabase Status Pill
+  const cloudBtn = $('#cloudStatusBtn');
+  if (cloudBtn) cloudBtn.onclick = () => showSupabaseModal();
+  updateCloudBadge();
+
+  // Background hydration from Supabase
+  if (typeof Supabase !== 'undefined' && Supabase.isConnected()) {
+    Supabase.pullAll().then(() => updateCloudBadge()).catch(e => console.warn('Supabase initial pull:', e));
+  }
+
   iconRefresh();
+}
+
+function updateCloudBadge() {
+  const btn = $('#cloudStatusBtn');
+  const txt = $('#cloudStatusText');
+  if (!btn || !txt) return;
+  const isConn = typeof Supabase !== 'undefined' && Supabase.isConnected();
+  btn.classList.toggle('connected', isConn);
+  btn.classList.toggle('disconnected', !isConn);
+  txt.textContent = isConn ? 'سحابي: متصل' : 'سحابي: غير متصل';
 }
 
 document.addEventListener('DOMContentLoaded', init);
