@@ -1,0 +1,13 @@
+# Temporary & test files
+scratch/
+.system_generated/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.vscode/
+.idea/

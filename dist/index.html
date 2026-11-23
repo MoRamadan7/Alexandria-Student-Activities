@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#073b67">
+  <meta name="description" content="قاعدة بيانات الطلاب المشاركين في فاعليات اتحاد طلاب جامعة الإسكندرية">
+  <title>قاعدة بيانات فاعليات اتحاد طلاب جامعة الإسكندرية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="assets.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="التنقل الرئيسي">
+      <div class="side-brand">
+        <img src="assets/student-union.png" alt="شعار اتحاد طلاب جامعة الإسكندرية">
+        <div><strong>اتحاد الطلاب</strong><span>جامعة الإسكندرية</span></div>
+      </div>
+      <nav class="side-nav">
+        <button class="nav-item active" data-page="dashboard"><i data-lucide="layout-dashboard"></i><span>لوحة التحكم</span></button>
+        <button class="nav-item" data-page="students"><i data-lucide="users"></i><span>الطلاب</span></button>
+        <button class="nav-item" data-page="events"><i data-lucide="calendar-days"></i><span>الفاعليات</span></button>
+        <button class="nav-item" data-page="supervisors"><i data-lucide="user-check"></i><span>هيئة الإشراف</span></button>
+        <button class="nav-item" data-page="import"><i data-lucide="file-up"></i><span>استيراد Excel</span></button>
+        <button class="nav-item" data-page="bans"><i data-lucide="shield-alert"></i><span>المحظورون</span></button>
+        <button class="nav-item" data-page="entities"><i data-lucide="network"></i><span>الكيانات</span></button>
+        <button class="nav-item" data-page="users"><i data-lucide="user-cog"></i><span>المستخدمون</span></button>
+      </nav>
+      <div class="side-user">
+        <div class="avatar">م</div>
+        <div><strong>محمد مرسال</strong><span>أدمن عام</span></div>
+        <button class="icon-btn" id="sideLogoutBtn" aria-label="تسجيل الخروج"><i data-lucide="log-out"></i></button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-toggle icon-btn" id="menuToggle" aria-label="فتح القائمة"><i data-lucide="menu"></i></button>
+        <div class="top-identity">
+          <img class="uni-logo" src="assets/alexandria-university.png" alt="شعار جامعة الإسكندرية">
+          <div>
+            <span class="eyebrow">اتحاد طلاب جامعة الإسكندرية</span>
+            <h1>قاعدة بيانات الطلاب المشاركين في الفاعليات</h1>
+          </div>
+          <img class="union-logo" src="assets/student-union.png" alt="شعار اتحاد طلاب جامعة الإسكندرية">
+        </div>
+        <div class="top-actions">
+          <div class="dropdown-wrap">
+            <button class="profile-chip" id="profileBtn"><span class="avatar small">م</span><span>أدمن عام</span><i data-lucide="chevron-down"></i></button>
+            <div class="dropdown-menu" id="profileDropdown">
+              <div class="dropdown-header"><span>محمد مرسال (أدمن عام)</span></div>
+              <div class="dropdown-list">
+                <button class="dropdown-item" id="menuSupabase"><i data-lucide="database"></i><span>إعدادات قاعدة بيانات Supabase</span></button>
+                <button class="dropdown-item" id="menuResetData"><i data-lucide="rotate-ccw"></i><span>استعادة البيانات الافتراضية</span></button>
+                <button class="dropdown-item danger" id="topLogoutBtn"><i data-lucide="log-out"></i><span>تسجيل الخروج</span></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="page active" id="dashboard">
+          <div class="page-heading">
+            <div><p class="kicker">نظرة عامة</p><h2>صباح الخير، محمد</h2><p>تابع الطلاب والفاعليات والحضور من مكان واحد.</p></div>
+            <div class="heading-actions"><span class="demo-badge"><i data-lucide="shield-check"></i> النظام المعتمد 2026</span><button class="btn primary" data-open="newEvent"><i data-lucide="plus"></i> فاعلية جديدة</button></div>
+          </div>
+
+          <div class="global-search">
+            <i data-lucide="search"></i>
+            <input id="globalSearch" type="search" placeholder="ابحث بالاسم، الكلية، الفاعلية، الرقم القومي أو الواتساب..." autocomplete="off">
+            <kbd>Ctrl K</kbd>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card blue"><div class="stat-icon"><i data-lucide="users"></i></div><div><span>إجمالي الطلاب</span><strong id="statTotalStudents">0</strong><small>بيانات مسجلة</small></div></article>
+            <article class="stat-card cyan"><div class="stat-icon"><i data-lucide="calendar-check"></i></div><div><span>إجمالي الفاعليات</span><strong id="statTotalEvents">0</strong><small>فاعلية مسجلة</small></div></article>
+            <article class="stat-card orange"><div class="stat-icon"><i data-lucide="clipboard-check"></i></div><div><span>سجلات الحضور</span><strong id="statTotalAttendance">0</strong><small>إجمالي المشاركات</small></div></article>
+            <article class="stat-card red"><div class="stat-icon"><i data-lucide="shield-alert"></i></div><div><span>المحظورون حاليًا</span><strong id="statTotalBans">0</strong><small>قرارات إدارية سارية</small></div></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel activity-panel">
+              <div class="panel-head"><div><h3>أحدث الفاعليات</h3><p>آخر الفاعليات المسجلة ونسب الحضور</p></div><button class="text-btn" data-go="events">عرض الكل</button></div>
+              <div class="event-list" id="dashboardEvents"></div>
+            </article>
+            <article class="panel distribution-panel">
+              <div class="panel-head">
+                <div><h3>التوزيع حسب الكليات</h3><p>أعلى الكليات مشاركة</p></div>
+                <button class="btn secondary sm" id="btnFacultyReport" style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:8px" title="تقرير شامل لنسب حضور ومشاركات كليات جامعة الإسكندرية">
+                  <i data-lucide="bar-chart-2"></i> تقرير ونسب حضور الكليات
+                </button>
+              </div>
+              <div class="bars" id="facultyBars"></div>
+            </article>
+            <article class="panel year-distribution-panel">
+              <div class="panel-head">
+                <div><h3>نسب وتوزيع الفرق الدراسية</h3><p>نسبة كل فرقة دراسية من إجمالي الطلاب</p></div>
+                <span class="badge active" id="totalYearsStudentBadge" style="font-size:11px">0 طالب</span>
+              </div>
+              <div class="bars" id="academicYearBars"></div>
+            </article>
+          </div>
+
+          <article class="panel recent-panel">
+            <div class="panel-head"><div><h3>طلاب تمت إضافتهم مؤخرًا</h3><p>آخر تحديثات قاعدة البيانات</p></div><button class="btn secondary" data-go="students">فتح كشف الطلاب</button></div>
+            <div class="table-wrap"><table><thead><tr><th>الطالب</th><th>الكلية</th><th>الفرقة</th><th>الكيانات</th><th>الفاعليات</th><th>الحالة</th><th></th></tr></thead><tbody id="recentStudents"></tbody></table></div>
+          </article>
+        </section>
+
+        <section class="page" id="students">
+          <div class="page-heading"><div><p class="kicker">قاعدة البيانات</p><h2>الطلاب</h2><p>بحث وفلترة وإدارة بيانات جميع الطلاب.</p></div><div class="heading-actions"><button class="btn secondary" id="btnCustomStudentExport" style="background:#eef6fc;color:var(--primary);border-color:#b9d9f2;font-weight:700"><i data-lucide="sliders"></i> كشف مخصص (فئات / أعداد)</button><button class="btn secondary" id="exportWordStudents"><i data-lucide="file-text"></i> كشف Word</button><button class="btn secondary" id="exportStudents"><i data-lucide="download"></i> تصدير Excel</button><button class="btn primary" data-open="newStudent"><i data-lucide="user-plus"></i> إضافة طالب</button></div></div>
+          <div class="panel filters"><div class="search-field"><i data-lucide="search"></i><input id="studentSearch" placeholder="ابحث باسم الطالب أو الرقم القومي أو الواتساب"></div><select id="facultyFilter"><option value="">كل الكليات</option></select><select id="statusFilter"><option value="">كل الحالات</option><option value="نشط">نشط</option><option value="محظور">محظور</option></select><button class="btn secondary" id="btnCustomSortStudents" style="display:inline-flex;align-items:center;gap:6px;font-weight:700"><i data-lucide="arrow-up-down"></i> ترتيب مخصص</button><button class="btn ghost" id="clearStudentFilters"><i data-lucide="rotate-ccw"></i> مسح</button></div>
+          <div class="panel"><div class="table-meta"><strong id="studentCount">0 طالب</strong><span>يظهر الرقم القومي مخفيًا لحماية البيانات</span></div><div class="table-wrap"><table><thead><tr><th>الطالب</th><th>الكلية والفرقة</th><th>الواتساب</th><th>الكيانات</th><th>عدد الفاعليات</th><th>الحالة</th><th></th></tr></thead><tbody id="studentsTable"></tbody></table></div><div class="mobile-cards" id="studentCards"></div></div>
+        </section>
+
+        <section class="page" id="events">
+          <div class="page-heading"><div><p class="kicker">إدارة الفاعليات</p><h2>الفاعليات</h2><p>تفاصيل الحضور وهيئة الإشراف والتقارير.</p></div><button class="btn primary" data-open="newEvent"><i data-lucide="plus"></i> فاعلية جديدة</button></div>
+          <div class="event-cards" id="eventsGrid"></div>
+        </section>
+
+        <section class="page" id="supervisors">
+          <div class="page-heading">
+            <div>
+              <p class="kicker">فريق العمل والقيادات</p>
+              <h2>هيئة الإشراف</h2>
+              <p>إدارة المشرفين والمسؤولين والربط المباشر بالفاعليات والتواصل الفوري.</p>
+            </div>
+            <div class="heading-actions">
+              <button class="btn primary" data-open="newSupervisor"><i data-lucide="user-plus"></i> إضافة مشرف جديد</button>
+            </div>
+          </div>
+          <div class="panel filters">
+            <div class="search-field">
+              <i data-lucide="search"></i>
+              <input id="supervisorSearch" placeholder="ابحث باسم المشرف، المسمى الوظيفي، الكلية، أو رقم الهاتف...">
+            </div>
+            <select id="supervisorRoleFilter"><option value="">كل المسميات الوظيفية</option></select>
+            <button class="btn ghost" id="clearSupervisorFilters"><i data-lucide="rotate-ccw"></i> مسح</button>
+          </div>
+          <div class="supervisors-grid" id="supervisorsGrid"></div>
+        </section>
+
+        <section class="page" id="import">
+          <div class="page-heading"><div><p class="kicker">استيراد ذكي</p><h2>استيراد كشف Excel</h2><p>النظام يتعرف على الأعمدة ويُوحّد الكتابة قبل الحفظ.</p></div><a class="btn secondary" href="#" id="downloadTemplate"><i data-lucide="file-down"></i> تحميل القالب</a></div>
+          <div class="import-layout">
+            <article class="panel upload-panel">
+              <div class="stepper"><span class="active">1</span><i></i><span>2</span><i></i><span>3</span></div>
+              <label class="dropzone" id="dropzone">
+                <input type="file" id="excelInput" accept=".xlsx,.xls" hidden>
+                <span class="upload-icon"><i data-lucide="file-spreadsheet"></i></span>
+                <strong>اسحب ملف Excel هنا</strong>
+                <p>أو اضغط لاختيار ملف بصيغة XLSX أو XLS</p>
+                <span class="btn primary">اختيار ملف</span>
+              </label>
+              <div class="privacy-note"><i data-lucide="lock-keyhole"></i><div><strong>المعالجة تتم داخل المتصفح في هذه النسخة</strong><p>لن نرفع الملف قبل اعتماد المعاينة وربط قاعدة Supabase.</p></div></div>
+            </article>
+            <aside class="panel import-guide"><h3>ما الذي يتعرف عليه النظام؟</h3><ul><li><i data-lucide="check"></i><span>الاسم رباعي أو الاسم</span></li><li><i data-lucide="check"></i><span>الفرقة والكلية ومرادفاتها</span></li><li><i data-lucide="check"></i><span>الرقم القومي (14 رقم)</span></li><li><i data-lucide="check"></i><span>رقم الهاتف أو الواتساب</span></li><li><i data-lucide="check"></i><span>عنوان الفاعلية ومكانها وتاريخها</span></li></ul><div class="normalization-box"><strong>توحيد تلقائي للكتابة</strong><p>أ / إ / آ ← ا · المسافات الزائدة · ة / ه · ى / ي · الأرقام العربية · «كلية» و«كليه»</p></div></aside>
+          </div>
+          <article class="panel preview-panel hidden" id="importPreview">
+            <div class="panel-head">
+              <div>
+                <h3 id="fileName">معاينة وتدقيق ملف Excel</h3>
+                <p id="previewSummary"></p>
+              </div>
+              <button class="btn ghost" id="cancelImport">إلغاء</button>
+            </div>
+            <div class="import-meta">
+              <label style="flex:1.4">ربط إجباري بالفاعلية *
+                <select id="importEventSelect" required>
+                  <option value="">-- اختر الفاعلية المراد تسجيل الحضور بها --</option>
+                </select>
+              </label>
+              <label>الكيان
+                <select id="importEntity">
+                  <option>اتحاد طلاب الجامعة</option>
+                  <option>الجوالة</option>
+                  <option>الأسر الطلابية</option>
+                  <option>القادة الاجتماعيون</option>
+                </select>
+              </label>
+              <label>نوع الحضور
+                <select id="importAttendanceType">
+                  <option>موحد لكل فترة الفاعلية</option>
+                  <option>حضور يومي</option>
+                </select>
+              </label>
+            </div>
+
+            <!-- إنشاء فاعلية جديدة للكشف مباشرة -->
+            <div class="new-import-event-box hidden" id="newImportEventBox" style="background:#f0f7fe;border:1.5px dashed #9bc3e6;border-radius:12px;padding:14px;margin:10px 0;">
+              <strong style="color:var(--navy);display:flex;align-items:center;gap:6px;margin-bottom:10px;font-size:13px">
+                <i data-lucide="calendar-plus"></i> إنشاء فاعلية جديدة مباشرة وربط الكشف بها:
+              </strong>
+              <div class="form-grid">
+                <label class="full">اسم الفاعلية الجديدة *
+                  <input id="importNewEventTitle" placeholder="مثال: المعسكر التثقيفي لإعداد القادة">
+                </label>
+                <label>تاريخ الفاعلية
+                  <input id="importNewEventDate" placeholder="مثال: 26 نوفمبر 2026">
+                </label>
+                <label>المكان
+                  <input id="importNewEventPlace" placeholder="مثال: قاعة المؤتمرات الكبرى – الشاطبي">
+                </label>
+                <label class="full">الجهة المنظمة
+                  <input id="importNewEventOrg" value="اتحاد طلاب جامعة الإسكندرية" placeholder="الجهة المنظمة">
+                </label>
+              </div>
+            </div>
+            
+            <div class="preview-stats" id="previewStats"></div>
+
+            <!-- Import Review Filter Tabs -->
+            <div class="import-filter-tabs">
+              <button type="button" class="import-tab-btn active" data-import-tab="all" id="tabImportAll">
+                <i data-lucide="layers"></i>
+                <span>كافة الصفوف</span>
+                <strong id="badgeImportAll">0</strong>
+              </button>
+              <button type="button" class="import-tab-btn has-errors" data-import-tab="errors" id="tabImportErrors">
+                <i data-lucide="alert-triangle"></i>
+                <span>قائمة مراجعة وتصحيح الأخطاء</span>
+                <strong id="badgeImportErrors">0</strong>
+              </button>
+              <button type="button" class="import-tab-btn" data-import-tab="valid" id="tabImportValid">
+                <i data-lucide="check-circle-2"></i>
+                <span>الصفوف السليمة والجديدة</span>
+                <strong id="badgeImportValid">0</strong>
+              </button>
+              <button type="button" class="import-tab-btn" data-import-tab="existing" id="tabImportExisting">
+                <i data-lucide="refresh-cw"></i>
+                <span>مسجلون مسبقاً / تحديث بيانات</span>
+                <strong id="badgeImportExisting">0</strong>
+              </button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>الاسم</th>
+                    <th>الكلية</th>
+                    <th>الفرقة</th>
+                    <th>الرقم القومي</th>
+                    <th>الهاتف / الواتساب</th>
+                    <th>حالة الفحص</th>
+                    <th style="min-width:180px">إجراءات المراجعة والتصحيح</th>
+                  </tr>
+                </thead>
+                <tbody id="previewRows"></tbody>
+              </table>
+            </div>
+
+            <div class="preview-actions">
+              <button class="btn secondary" id="backToFile">اختيار ملف آخر</button>
+              <button class="btn primary" id="confirmImport"><i data-lucide="database-zap"></i> اعتماد واستيراد الصفوف الجاهزة</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="page" id="bans">
+          <div class="page-heading"><div><p class="kicker">الحماية والانضباط</p><h2>الطلاب المحظورون</h2><p>إدارة الحظر المؤقت والنهائي مع حفظ السبب والسجل.</p></div><button class="btn danger" data-open="newBan"><i data-lucide="shield-x"></i> إضافة حظر</button></div>
+          <div class="ban-summary"><div><span>محظور حاليًا</span><strong id="banTotal">0</strong></div><div><span>حظر مؤقت</span><strong id="banTemp">0</strong></div><div><span>حظر نهائي</span><strong id="banPerm">0</strong></div><div><span>ينتهي هذا الشهر</span><strong id="banExpMonth">0</strong></div></div>
+          <div class="panel"><div class="table-wrap"><table><thead><tr><th>الطالب</th><th>نوع الحظر</th><th>السبب</th><th>تاريخ البداية</th><th>تاريخ الانتهاء</th><th>بواسطة</th><th></th></tr></thead><tbody id="bansTable"></tbody></table></div></div>
+        </section>
+
+        <section class="page" id="entities">
+          <div class="page-heading"><div><p class="kicker">الانتماءات</p><h2>الكيانات الطلابية</h2><p>يمكن للطالب الانضمام لأكثر من كيان في الوقت نفسه.</p></div><button class="btn primary" data-open="newEntity"><i data-lucide="plus"></i> كيان جديد</button></div>
+          <div class="entity-grid" id="entitiesGrid"></div>
+        </section>
+
+        <section class="page" id="users">
+          <div class="page-heading"><div><p class="kicker">الصلاحيات</p><h2>المستخدمون</h2><p>الدخول بالجيميل فقط، وإدارة الأدمن والمشاهد من داخل النظام.</p></div><button class="btn primary" data-open="newUser"><i data-lucide="user-plus"></i> إضافة مستخدم</button></div>
+          <div class="permission-note"><i data-lucide="info"></i><p><strong>المشاهد:</strong> يطّلع على البيانات والتقارير فقط، ولا يمكنه الإضافة أو التعديل أو الحذف أو الاستيراد أو التصدير.</p></div>
+          <div class="panel"><div class="table-wrap"><table><thead><tr><th>المستخدم</th><th>البريد الإلكتروني</th><th>الدور</th><th>آخر دخول</th><th>الحالة</th><th></th></tr></thead><tbody id="usersTable"></tbody></table></div></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="التنقل على الهاتف">
+    <button class="active" data-page="dashboard"><i data-lucide="layout-dashboard"></i><span>الرئيسية</span></button>
+    <button data-page="students"><i data-lucide="users"></i><span>الطلاب</span></button>
+    <button data-page="events"><i data-lucide="calendar-days"></i><span>الفاعليات</span></button>
+    <button data-page="import"><i data-lucide="file-up"></i><span>استيراد</span></button>
+    <button id="mobileMoreBtn"><i data-lucide="menu"></i><span>المزيد</span></button>
+  </nav>
+
+  <div class="bottom-sheet" id="moreBottomSheet">
+    <div class="bottom-sheet-head">
+      <h3>المزيد من الأقسام</h3>
+      <button class="icon-btn" id="closeBottomSheet" aria-label="إغلاق"><i data-lucide="x"></i></button>
+    </div>
+    <div class="bottom-sheet-grid">
+      <button class="bottom-sheet-btn" data-page="supervisors"><i data-lucide="user-check"></i><span>هيئة الإشراف</span></button>
+      <button class="bottom-sheet-btn" data-page="bans"><i data-lucide="shield-alert"></i><span>المحظورون</span></button>
+      <button class="bottom-sheet-btn" data-page="entities"><i data-lucide="network"></i><span>الكيانات</span></button>
+      <button class="bottom-sheet-btn" data-page="users"><i data-lucide="user-cog"></i><span>المستخدمون</span></button>
+      <button class="bottom-sheet-btn" id="mobileSupabaseBtn"><i data-lucide="database"></i><span>ربط Supabase</span></button>
+    </div>
+  </div>
+
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <div class="modal" id="formModal" aria-hidden="true"><div class="modal-card"><button class="modal-close icon-btn" aria-label="إغلاق"><i data-lucide="x"></i></button><div id="modalContent"></div></div></div>
+  <div class="toast" id="toast"><i data-lucide="circle-check"></i><span></span></div>
+</body>
+</html>

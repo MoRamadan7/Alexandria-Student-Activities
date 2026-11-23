@@ -1,0 +1,4 @@
+/downloads/*
+  Content-Disposition: attachment
+  Content-Type: application/zip
+  Cache-Control: private, no-store
