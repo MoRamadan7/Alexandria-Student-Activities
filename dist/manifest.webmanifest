@@ -1,0 +1,36 @@
+{
+  "name": "منظومة الأنشطة الطلابية - جامعة الإسكندرية",
+  "short_name": "اتحاد الطلاب",
+  "description": "قاعدة بيانات الطلاب المشاركين في فاعليات اتحاد طلاب جامعة الإسكندرية",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#073b67",
+  "theme_color": "#073b67",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/student-union.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

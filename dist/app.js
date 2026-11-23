@@ -42,40 +42,11 @@ const GOVERNORATES = {
   '33': 'مطروح', '34': 'شمال سيناء', '35': 'جنوب سيناء', '88': 'خارج الجمهورية'
 };
 
-// 4. Initial Seed Data: Supervisors Team
-const defaultSupervisors = [
-  { id: 1, name: 'محمد فوزي', role: 'مشرف عام الاتحاد', phone: '01001234567', faculty: 'الإدارة العامة لرعاية الشباب', status: 'نشط' },
-  { id: 2, name: 'شهاب محروس', role: 'مدير إدارة الاتحادات الطلابية', phone: '01112345678', faculty: 'الإدارة العامة لرعاية الشباب', status: 'نشط' },
-  { id: 3, name: 'د. نجلاء حسن', role: 'رائد أسرة ومستشار الأنشطة', phone: '01223456789', faculty: 'كلية الأعمال', status: 'نشط' },
-  { id: 4, name: 'أحمد صبري', role: 'أخصائي رعاية شباب أول', phone: '01554321987', faculty: 'كلية الهندسة', status: 'نشط' },
-  { id: 5, name: 'محمود عبد الحميد', role: 'قائد تدريب الجوالة والخدمة العامة', phone: '01098765432', faculty: 'إدارة الجوالة والخدمة العامة', status: 'نشط' },
-  { id: 6, name: 'د. كريم شوقي', role: 'مشرف النشاط الرياضي الجامعي', phone: '01155667788', faculty: 'كلية علوم الرياضة بنين', status: 'نشط' },
-  { id: 7, name: 'منى إبراهيم', role: 'مسؤول الاتصال الطلابي والأنشطة', phone: '01288990011', faculty: 'الإدارة العامة لرعاية الشباب', status: 'نشط' },
-  { id: 8, name: 'آية سمير', role: 'منسق التدريب والتأهيل الرقمي', phone: '01066778899', faculty: 'كلية الحاسبات وعلوم البيانات', status: 'نشط' },
-  { id: 9, name: 'محمود فريد', role: 'أخصائي النشاط الثقافي والفني', phone: '01511223344', faculty: 'الإدارة العامة لرعاية الشباب', status: 'نشط' }
-];
-
-// Initial Seed Data: Students
-const defaultStudents = [
-  { id: 1, name: 'أحمد محمد السيد', faculty: 'الهندسة', year: 'الفرقة الثالثة', phone: '01012344821', national: '30304150201235', entities: ['اتحاد طلاب الكلية', 'الجوالة'], status: 'نشط' },
-  { id: 2, name: 'فاطمة محمود علي', faculty: 'الصيدلة', year: 'الفرقة الثانية', phone: '01123459032', national: '30409200204562', entities: ['الأسر الطلابية'], status: 'نشط' },
-  { id: 3, name: 'يوسف خالد إبراهيم', faculty: 'الأعمال', year: 'الفرقة الرابعة', phone: '01234561170', national: '30211051807891', entities: ['القادة الاجتماعيون'], status: 'نشط' },
-  { id: 4, name: 'مريم هاني مصطفى', faculty: 'الآداب', year: 'الفرقة الأولى', phone: '01545676844', national: '30501180203124', entities: ['اتحاد طلاب الكلية'], status: 'نشط' },
-  { id: 5, name: 'عمر وليد حسن', faculty: 'الحاسبات وعلوم البيانات', year: 'الفرقة الثالثة', phone: '01056785103', national: '30308300206531', entities: ['فريق المتطوعين', 'الجوالة'], status: 'نشط' },
-  { id: 6, name: 'سارة شريف كامل', faculty: 'السياحة والفنادق', year: 'الفرقة الثانية', phone: '01167892916', national: '30403120208146', entities: ['الأسر الطلابية'], status: 'محظور' },
-  { id: 7, name: 'زياد عمرو عبد الله', faculty: 'الحقوق', year: 'الفرقة الرابعة', phone: '01278903588', national: '30206251601453', entities: ['اتحاد طلاب الجامعة'], status: 'نشط' },
-  { id: 8, name: 'منة الله سامح', faculty: 'التمريض', year: 'الفرقة الأولى', phone: '01589017504', national: '30512040209822', entities: ['فريق المتطوعين'], status: 'نشط' }
-];
-
-// Initial Seed Data: Events
-const defaultEvents = [
-  { id: 1, title: 'المعسكر التثقيفي لإعداد وتأهيل القيادات الطلابية', date: '17–18 نوفمبر 2026', day: '17', month: 'نوفمبر', place: 'قرية فخر البحار – سيدي كرير', registered: 54, days: 2, supervisorIds: [1, 2], attendeeIds: [1, 2, 3, 4, 5, 7, 8], status: 'مكتملة', organizer: 'اتحاد طلاب الجامعة' },
-  { id: 2, title: 'ملتقى الابتكار وريادة الأعمال الطلابي', date: '24 نوفمبر 2026', day: '24', month: 'نوفمبر', place: 'مركز المؤتمرات – سموحة', registered: 210, days: 1, supervisorIds: [3, 4], attendeeIds: [1, 3, 5, 7], status: 'قادمة', organizer: 'الأسر الطلابية' },
-  { id: 3, title: 'معسكر الجوالة والخدمة العامة', date: '2–5 ديسمبر 2026', day: '02', month: 'ديسمبر', place: 'المدينة الشبابية – أبو قير', registered: 120, days: 4, supervisorIds: [5], attendeeIds: [1, 5], status: 'قادمة', organizer: 'الجوالة' },
-  { id: 4, title: 'المهرجان الرياضي لكليات الجامعة', date: '10 نوفمبر 2026', day: '10', month: 'نوفمبر', place: 'استاد الجامعة', registered: 338, days: 1, supervisorIds: [6, 7], attendeeIds: [1, 2, 3, 5, 7, 8], status: 'مكتملة', organizer: 'اتحاد طلاب الجامعة' },
-  { id: 5, title: 'ندوة الوعي الرقمي والأمن السيبراني', date: '5 نوفمبر 2026', day: '05', month: 'نوفمبر', place: 'كلية الحاسبات وعلوم البيانات', registered: 156, days: 1, supervisorIds: [8], attendeeIds: [5, 7], status: 'مكتملة', organizer: 'اتحاد طلاب الكلية' },
-  { id: 6, title: 'زيارة مكتبة الإسكندرية', date: '28 أكتوبر 2026', day: '28', month: 'أكتوبر', place: 'مكتبة الإسكندرية', registered: 80, days: 1, supervisorIds: [9], attendeeIds: [2, 4], status: 'مكتملة', organizer: 'النشاط الثقافي' }
-];
+// 4. Initial Seed Data: Clean production state (Empty arrays ready for user's real data)
+const defaultSupervisors = [];
+const defaultStudents = [];
+const defaultEvents = [];
+const defaultBans = [];
 
 const defaultEntities = [
   { id: 1, name: 'اتحاد طلاب الجامعة', icon: 'landmark', type: 'اتحاد', status: 'نشط' },
@@ -88,18 +59,20 @@ const defaultEntities = [
   { id: 8, name: 'النشاط الرياضي', icon: 'trophy', type: 'نشاط', status: 'نشط' }
 ];
 
-const defaultBans = [
-  { id: 1, studentId: 6, name: 'سارة شريف كامل', faculty: 'السياحة والفنادق', national: '30403120208146', type: 'مؤقت', reason: 'مخالفة ضوابط المشاركة في الفاعلية', from: '2026-11-10', to: '2027-01-10', by: 'محمد مرسال', active: true },
-  { id: 2, studentId: null, name: 'محمود عادل حسين', faculty: 'الحقوق', national: '30105120209871', type: 'نهائي', reason: 'قرار إداري موثق من مجلس التأديب', from: '2026-10-02', to: '—', by: 'شهاب محروس', active: true },
-  { id: 3, studentId: null, name: 'نور أحمد لطفي', faculty: 'التربية', national: '30309190204128', type: 'مؤقت', reason: 'تحت المراجعة والتحقيق الإداري', from: '2026-11-15', to: '2026-11-30', by: 'محمد مرسال', active: true }
+const defaultUsers = [
+  { id: 1, name: 'محمد مرسال', email: 'mohamed@example.com', role: 'أدمن عام', last: 'الآن', status: 'نشط' },
+  { id: 2, name: 'شهاب محروس', email: 'shehab@example.com', role: 'أدمن عام', last: 'الآن', status: 'نشط' }
 ];
 
-const defaultUsers = [
-  { id: 1, name: 'محمد مرسال', email: 'mohamed@example.com', role: 'أدمن عام', last: 'اليوم، 4:20 م', status: 'نشط' },
-  { id: 2, name: 'شهاب محروس', email: 'shehab@example.com', role: 'أدمن عام', last: 'أمس، 8:15 م', status: 'نشط' },
-  { id: 3, name: 'أحمد صبري', email: 'ahmed@example.com', role: 'مشاهد', last: '17 نوفمبر، 11:02 ص', status: 'نشط' },
-  { id: 4, name: 'منى إبراهيم', email: 'mona@example.com', role: 'مشاهد', last: 'لم يسجل الدخول بعد', status: 'دعوة معلقة' }
-];
+// Production Cache Versioning (Auto-cleans stale dummy test records)
+const APP_DATA_VERSION = 'v2_live_production_clean_100';
+if (typeof localStorage !== 'undefined' && localStorage.getItem('asa_data_version') !== APP_DATA_VERSION) {
+  localStorage.removeItem('asa_students');
+  localStorage.removeItem('asa_events');
+  localStorage.removeItem('asa_supervisors');
+  localStorage.removeItem('asa_bans');
+  localStorage.setItem('asa_data_version', APP_DATA_VERSION);
+}
 
 // 5. Persistent Storage Layer
 const Storage = {
@@ -132,14 +105,10 @@ const Storage = {
     localStorage.removeItem('asa_events');
     localStorage.removeItem('asa_supervisors');
     localStorage.removeItem('asa_bans');
-    localStorage.removeItem('asa_entities');
-    localStorage.removeItem('asa_users');
-    state.students = JSON.parse(JSON.stringify(defaultStudents));
-    state.events = JSON.parse(JSON.stringify(defaultEvents));
-    state.supervisors = JSON.parse(JSON.stringify(defaultSupervisors));
-    state.bans = JSON.parse(JSON.stringify(defaultBans));
-    state.entities = JSON.parse(JSON.stringify(defaultEntities));
-    state.users = JSON.parse(JSON.stringify(defaultUsers));
+    state.students = [];
+    state.events = [];
+    state.supervisors = [];
+    state.bans = [];
     this.saveAll();
   }
 };
@@ -160,10 +129,10 @@ if (!savedSupabase || !savedSupabase.url || !savedSupabase.key) {
 
 const state = {
   page: 'dashboard',
-  students: Storage.get('asa_students', defaultStudents),
-  events: Storage.get('asa_events', defaultEvents),
-  supervisors: Storage.get('asa_supervisors', defaultSupervisors),
-  bans: Storage.get('asa_bans', defaultBans),
+  students: Storage.get('asa_students', []),
+  events: Storage.get('asa_events', []),
+  supervisors: Storage.get('asa_supervisors', []),
+  bans: Storage.get('asa_bans', []),
   entities: Storage.get('asa_entities', defaultEntities),
   users: Storage.get('asa_users', defaultUsers),
   supabase: savedSupabase,
@@ -218,9 +187,7 @@ const Supabase = {
         this.req('GET', '/rest/v1/bans?select=*')
       ]);
 
-      let hasRemoteData = false;
-
-      if (supRows && supRows.length > 0) {
+      if (Array.isArray(supRows)) {
         state.supervisors = supRows.map(r => ({
           id: r.id,
           name: r.name,
@@ -229,10 +196,9 @@ const Supabase = {
           faculty: r.faculty,
           status: r.status
         }));
-        hasRemoteData = true;
       }
 
-      if (stuRows && stuRows.length > 0) {
+      if (Array.isArray(stuRows)) {
         state.students = stuRows.map(r => ({
           id: r.id,
           national: r.national_id,
@@ -243,16 +209,17 @@ const Supabase = {
           status: r.status,
           entities: r.entities || []
         }));
-        hasRemoteData = true;
       }
 
-      if (evRows && evRows.length > 0) {
+      if (Array.isArray(evRows)) {
         state.events = evRows.map(r => {
           const matchingAtt = (attRows || []).filter(a => a.event_id === r.id);
           return {
             id: r.id,
             title: r.title,
             date: r.date_str,
+            day: (r.date_str && r.date_str.match(/\d+/)) ? r.date_str.match(/\d+/)[0] : '01',
+            month: 'نوفمبر',
             place: r.place,
             registered: r.registered_target,
             days: r.days_count,
@@ -262,13 +229,13 @@ const Supabase = {
             attendeeIds: matchingAtt.map(a => a.student_id)
           };
         });
-        hasRemoteData = true;
       }
 
-      if (banRows && banRows.length > 0) {
+      if (Array.isArray(banRows)) {
         state.bans = banRows.map(r => ({
           id: r.id,
           studentId: r.student_id,
+          name: r.student_name,
           student: r.student_name,
           faculty: r.faculty,
           national: r.national_id,
@@ -279,17 +246,15 @@ const Supabase = {
           by: r.issued_by,
           active: r.is_active
         }));
-        hasRemoteData = true;
       }
 
-      if (hasRemoteData) {
-        Storage.saveAll();
-        renderStudents();
-        renderEvents();
-        renderSupervisors();
-        renderBans();
-        updateDashboardStats();
-      }
+      Storage.saveAll();
+      renderStudents();
+      renderEvents();
+      renderSupervisors();
+      renderBans();
+      updateDashboardStats();
+      updateCloudBadge();
       return true;
     } catch (err) {
       console.warn('pullAll failed:', err);
@@ -301,60 +266,16 @@ const Supabase = {
     if (!this.isConnected()) return false;
     try {
       for (const s of state.supervisors) {
-        await this.req('POST', '/rest/v1/supervisors', {
-          id: s.id,
-          name: s.name,
-          role: s.role,
-          phone: s.phone,
-          faculty: s.faculty,
-          status: s.status
-        });
+        await this.syncSupervisor(s);
       }
       for (const st of state.students) {
-        await this.req('POST', '/rest/v1/students?on_conflict=national_id', {
-          id: st.id,
-          national_id: st.national,
-          name: st.name,
-          faculty: st.faculty,
-          academic_year: st.year,
-          phone: st.phone,
-          status: st.status,
-          entities: st.entities || []
-        });
+        await this.syncStudent(st);
       }
       for (const e of state.events) {
-        await this.req('POST', '/rest/v1/events?on_conflict=id', {
-          id: e.id,
-          title: e.title,
-          date_str: e.date,
-          place: e.place,
-          registered_target: e.registered,
-          days_count: e.days,
-          supervisor_ids: e.supervisorIds || [],
-          organizer: e.organizer,
-          status: e.status
-        });
-        for (const sid of (e.attendeeIds || [])) {
-          await this.req('POST', '/rest/v1/event_attendance?on_conflict=event_id,student_id', {
-            event_id: e.id,
-            student_id: sid,
-            attendance_status: 'حاضر'
-          });
-        }
+        await this.syncEvent(e);
       }
       for (const b of state.bans) {
-        await this.req('POST', '/rest/v1/bans', {
-          student_id: b.studentId,
-          student_name: b.student,
-          faculty: b.faculty,
-          national_id: b.national,
-          ban_type: b.type,
-          reason: b.reason,
-          from_date: b.from,
-          to_date: b.to,
-          issued_by: b.by,
-          is_active: b.active
-        });
+        await this.syncBan(b);
       }
       return true;
     } catch (err) {
@@ -364,89 +285,152 @@ const Supabase = {
   },
 
   async syncStudent(st) {
-    if (!this.isConnected() || !st) return;
-    return this.req('POST', '/rest/v1/students?on_conflict=national_id', {
-      id: st.id,
-      national_id: st.national,
-      name: st.name,
-      faculty: st.faculty,
-      academic_year: st.year,
-      phone: st.phone,
-      status: st.status,
-      entities: st.entities || []
-    });
+    if (!this.isConnected() || !st) return null;
+    try {
+      const payload = {
+        national_id: st.national,
+        name: st.name,
+        faculty: st.faculty,
+        academic_year: st.year,
+        phone: st.phone,
+        status: st.status || 'نشط',
+        entities: st.entities || []
+      };
+      if (st.id && Number.isInteger(st.id) && st.id < 1000000000) {
+        payload.id = st.id;
+      }
+      const res = await this.req('POST', '/rest/v1/students?on_conflict=national_id', payload);
+      if (res && res[0] && res[0].id) {
+        st.id = res[0].id;
+        Storage.saveAll();
+      }
+      return res;
+    } catch (err) {
+      console.warn('syncStudent error:', err);
+      return null;
+    }
   },
 
   async deleteStudent(id) {
-    if (!this.isConnected()) return;
+    if (!this.isConnected()) return null;
     return this.req('DELETE', `/rest/v1/students?id=eq.${id}`);
   },
 
   async syncEvent(e) {
-    if (!this.isConnected() || !e) return;
-    await this.req('POST', '/rest/v1/events?on_conflict=id', {
-      id: e.id,
-      title: e.title,
-      date_str: e.date,
-      place: e.place,
-      registered_target: e.registered,
-      days_count: e.days,
-      supervisor_ids: e.supervisorIds || [],
-      organizer: e.organizer,
-      status: e.status
-    });
-    if (e.attendeeIds && e.attendeeIds.length) {
-      for (const sid of e.attendeeIds) {
-        await this.req('POST', '/rest/v1/event_attendance?on_conflict=event_id,student_id', {
-          event_id: e.id,
-          student_id: sid,
-          attendance_status: 'حاضر'
-        });
+    if (!this.isConnected() || !e) return null;
+    try {
+      const payload = {
+        title: e.title,
+        date_str: e.date,
+        place: e.place,
+        registered_target: e.registered || 0,
+        days_count: e.days || 1,
+        supervisor_ids: e.supervisorIds || [],
+        organizer: e.organizer,
+        status: e.status
+      };
+      if (e.id && Number.isInteger(e.id) && e.id < 1000000000) {
+        payload.id = e.id;
       }
+      const res = await this.req('POST', '/rest/v1/events?on_conflict=id', payload);
+      if (res && res[0] && res[0].id) {
+        e.id = res[0].id;
+        Storage.saveAll();
+      }
+      if (e.attendeeIds && e.attendeeIds.length) {
+        for (const sid of e.attendeeIds) {
+          await this.syncAttendance(e.id, sid);
+        }
+      }
+      return res;
+    } catch (err) {
+      console.warn('syncEvent error:', err);
+      return null;
     }
   },
 
   async deleteEvent(id) {
-    if (!this.isConnected()) return;
+    if (!this.isConnected()) return null;
     return this.req('DELETE', `/rest/v1/events?id=eq.${id}`);
   },
 
   async syncSupervisor(s) {
-    if (!this.isConnected() || !s) return;
-    return this.req('POST', '/rest/v1/supervisors', {
-      id: s.id,
-      name: s.name,
-      role: s.role,
-      phone: s.phone,
-      faculty: s.faculty,
-      status: s.status
-    });
+    if (!this.isConnected() || !s) return null;
+    try {
+      const payload = {
+        name: s.name,
+        role: s.role,
+        phone: s.phone,
+        faculty: s.faculty,
+        status: s.status
+      };
+      if (s.id && Number.isInteger(s.id) && s.id < 1000000000) {
+        payload.id = s.id;
+      }
+      const res = await this.req('POST', '/rest/v1/supervisors?on_conflict=id', payload);
+      if (res && res[0] && res[0].id) {
+        s.id = res[0].id;
+        Storage.saveAll();
+      }
+      return res;
+    } catch (err) {
+      console.warn('syncSupervisor error:', err);
+      return null;
+    }
   },
 
   async deleteSupervisor(id) {
-    if (!this.isConnected()) return;
+    if (!this.isConnected()) return null;
     return this.req('DELETE', `/rest/v1/supervisors?id=eq.${id}`);
   },
 
   async syncBan(b) {
-    if (!this.isConnected() || !b) return;
-    return this.req('POST', '/rest/v1/bans', {
-      student_id: b.studentId,
-      student_name: b.student,
-      faculty: b.faculty,
-      national_id: b.national,
-      ban_type: b.type,
-      reason: b.reason,
-      from_date: b.from,
-      to_date: b.to,
-      issued_by: b.by,
-      is_active: b.active
-    });
+    if (!this.isConnected() || !b) return null;
+    try {
+      const payload = {
+        student_id: b.studentId || null,
+        student_name: b.name || b.student || 'غير محدد',
+        faculty: b.faculty,
+        national_id: b.national,
+        ban_type: b.type,
+        reason: b.reason,
+        from_date: b.from,
+        to_date: b.to === '—' ? null : (b.to || null),
+        issued_by: b.by,
+        is_active: b.active !== false
+      };
+      if (b.id && Number.isInteger(b.id) && b.id < 1000000000) {
+        payload.id = b.id;
+      }
+      const res = await this.req('POST', '/rest/v1/bans?on_conflict=id', payload);
+      if (res && res[0] && res[0].id) {
+        b.id = res[0].id;
+        Storage.saveAll();
+      }
+      return res;
+    } catch (err) {
+      console.warn('syncBan error:', err);
+      return null;
+    }
   },
 
   async deleteBan(id) {
-    if (!this.isConnected()) return;
+    if (!this.isConnected()) return null;
     return this.req('DELETE', `/rest/v1/bans?id=eq.${id}`);
+  },
+
+  async syncAttendance(eventId, studentId) {
+    if (!this.isConnected() || !eventId || !studentId) return null;
+    return this.req('POST', '/rest/v1/event_attendance?on_conflict=event_id,student_id', {
+      event_id: eventId,
+      student_id: studentId,
+      attendance_status: 'حاضر'
+    });
+  },
+
+  async deleteAttendance(eventId, studentId) {
+    if (!this.isConnected() || !eventId || !studentId) return null;
+    return this.req('DELETE', `/rest/v1/event_attendance?event_id=eq.${eventId}&student_id=eq.${studentId}`);
   }
 };
 
@@ -1028,9 +1012,9 @@ function studentCard(s) {
 }
 
 function renderStudents(list = state.students) {
-  $('#studentsTable').innerHTML = list.map(studentRow).join('') || '<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">لا يوجد طلاب مطابقين للبحث</td></tr>';
-  $('#studentCards').innerHTML = list.map(studentCard).join('') || '<p style="text-align:center;padding:20px;color:var(--muted)">لا يوجد طلاب</p>';
-  $('#recentStudents').innerHTML = state.students.slice(-5).reverse().map(studentRow).join('');
+  $('#studentsTable').innerHTML = list.map(studentRow).join('') || '<tr><td colspan="7" style="text-align:center;padding:40px 20px;color:var(--muted)"><div><i data-lucide="users" style="width:36px;height:36px;opacity:0.4;margin-bottom:8px"></i></div><strong style="display:block;margin-bottom:4px">لا توجد بيانات طلاب حالياً</strong><span style="font-size:12px">قاعدة البيانات جاهزة لاستقبال بياناتك الحقيقية. اضغط «طالب جديد» أو توجه إلى «استيراد Excel».</span></td></tr>';
+  $('#studentCards').innerHTML = list.map(studentCard).join('') || '<div style="text-align:center;padding:30px;color:var(--muted)">لا يوجد طلاب مسجلون حالياً</div>';
+  $('#recentStudents').innerHTML = state.students.length ? state.students.slice(-5).reverse().map(studentRow).join('') : '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">لا يوجد طلاب مسجلون بعد</td></tr>';
   $('#studentCount').textContent = `${list.length.toLocaleString('ar-EG')} طالب`;
   bindStudentRowActions();
   updateDashboardStats();
@@ -1076,7 +1060,7 @@ function renderEvents() {
       </div>
       <div class="progress-ring" style="--p:${pct}%"><span>${pct}%</span></div>
     </div>`;
-  }).join('');
+  }).join('') || '<div style="padding:24px;text-align:center;color:var(--muted);font-size:13px"><i data-lucide="calendar" style="width:28px;height:28px;margin-bottom:6px;opacity:0.5"></i><div>لا توجد فاعليات مسجلة حالياً</div></div>';
 
   $('#eventsGrid').innerHTML = evs.map(e => {
     const attendeesCount = (e.attendeeIds || []).length;
@@ -1114,7 +1098,16 @@ function renderEvents() {
         </div>
       </div>
     </article>`;
-  }).join('');
+  }).join('') || `
+    <div style="grid-column:1/-1;text-align:center;padding:50px 20px;background:var(--card);border:2px dashed var(--line);border-radius:16px">
+      <div style="width:56px;height:56px;border-radius:50%;background:#e0f2fe;color:#0284c7;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px">
+        <i data-lucide="calendar-plus" style="width:28px;height:28px"></i>
+      </div>
+      <h3 style="color:var(--navy);font-size:16px;margin-bottom:6px">لا توجد فاعليات مضافة حتى الآن</h3>
+      <p style="color:var(--muted);font-size:13px;max-width:420px;margin:0 auto 16px auto">يمكنك البدء الآن بإنشاء فاعلية جديدة وتحديد مكانها وتاريخها وهيئة الإشراف عليها.</p>
+      <button class="btn primary" onclick="openForm('newEvent')"><i data-lucide="plus"></i> إضافة فاعلية جديدة</button>
+    </div>
+  `;
 
   $$('[data-event-view]').forEach(b => b.onclick = () => showEvent(state.events.find(e => e.id == b.dataset.eventView)));
   $$('[data-export-word]').forEach(b => b.onclick = () => exportEventWord(state.events.find(e => e.id == b.dataset.exportWord)));
@@ -1237,6 +1230,7 @@ function showEvent(e) {
       updateDashboardStats();
       showEvent(e);
       toast('تمت إزالة الطالب من كشف الفاعلية');
+      Supabase.deleteAttendance(e.id, studentId);
     };
   });
 
@@ -1263,6 +1257,7 @@ function showEvent(e) {
     updateDashboardStats();
     showEvent(e);
     toast(`تم تسجيل حضور الطالب "${student.name}" بنجاح!`);
+    Supabase.syncAttendance(e.id, student.id);
   }
 
   checkinInput.oninput = () => {
@@ -1352,7 +1347,7 @@ function renderSupervisors(list = state.supervisors) {
         </div>
       </div>
     </article>`;
-  }).join('') || '<p style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted)">لا يوجد مشرفون مطابقون للبحث</p>';
+  }).join('') || '<div style="grid-column:1/-1;text-align:center;padding:40px 20px;background:var(--card);border:2px dashed var(--line);border-radius:16px"><i data-lucide="user-check" style="width:36px;height:36px;color:var(--muted);margin-bottom:8px"></i><div style="font-weight:700;color:var(--navy);margin-bottom:4px">لا يوجد مشرفون مسجلون حالياً</div><p style="color:var(--muted);font-size:12px;margin:0 auto 12px auto">اضغط على زر «إضافة مشرف» لإدراج أعضاء هيئة الإشراف ورعاية الشباب.</p><button class="btn secondary" onclick="openForm(\'newSupervisor\')" style="font-size:12px"><i data-lucide="plus"></i> إضافة مشرف جديد</button></div>';
 
   // Update role filter options dynamically from actual & saved roles
   const roleFilter = $('#supervisorRoleFilter');
@@ -1557,7 +1552,10 @@ function renderBans() {
       <td>${safe(b.to)}</td>
       <td>${safe(b.by)}</td>
       <td>
-        ${isActive ? `<button class="btn ghost" data-unban="${b.id}" style="min-height:30px;padding:3px 8px;font-size:11px;color:var(--green)">رفع الحظر</button>` : '<span class="badge" style="background:#eee;color:#888">ملغي</span>'}
+        <div style="display:flex;align-items:center;gap:4px">
+          ${isActive ? `<button class="btn ghost" data-unban="${b.id}" style="min-height:30px;padding:3px 8px;font-size:11px;color:var(--green)">رفع الحظر</button>` : '<span class="badge" style="background:#eee;color:#888">ملغي</span>'}
+          <button class="row-menu" data-delete-ban="${b.id}" title="حذف قرار الحظر نهائياً" style="color:var(--red)"><i data-lucide="trash-2"></i></button>
+        </div>
       </td>
     </tr>`;
   }).join('') || '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">لا يوجد طلاب محظورون حالياً</td></tr>';
@@ -1566,7 +1564,7 @@ function renderBans() {
     b.onclick = () => {
       const ban = state.bans.find(x => x.id == b.dataset.unban);
       if (!ban) return;
-      if (confirm(`هل أنت متأكد من رفع الحظر عن الطالب "${ban.name}"؟`)) {
+      if (confirm(`هل أنت متأكد من رفع الحظر عن الطالب "${ban.name || ban.student}"؟`)) {
         ban.active = false;
         const student = state.students.find(s => s.id === ban.studentId || s.national === ban.national);
         if (student) student.status = 'نشط';
@@ -1574,7 +1572,28 @@ function renderBans() {
         renderBans();
         renderStudents();
         updateDashboardStats();
-        toast(`تم رفع الحظر عن الطالب "${ban.name}" بنجاح`);
+        toast(`تم رفع الحظر عن الطالب "${ban.name || ban.student}" بنجاح`);
+        Supabase.syncBan(ban);
+        if (student) Supabase.syncStudent(student);
+      }
+    };
+  });
+
+  $$('[data-delete-ban]').forEach(b => {
+    b.onclick = () => {
+      const ban = state.bans.find(x => x.id == b.dataset.deleteBan);
+      if (!ban) return;
+      if (confirm(`هل أنت متأكد من حذف قرار الحظر الخاص بـ "${ban.name || ban.student}" نهائياً؟`)) {
+        state.bans = state.bans.filter(x => x.id != ban.id);
+        const student = state.students.find(s => s.id === ban.studentId || s.national === ban.national);
+        if (student) student.status = 'نشط';
+        Storage.saveAll();
+        renderBans();
+        renderStudents();
+        updateDashboardStats();
+        toast('تم حذف قرار الحظر نهائياً');
+        Supabase.deleteBan(ban.id);
+        if (student) Supabase.syncStudent(student);
       }
     };
   });
@@ -2210,7 +2229,7 @@ function openForm(type, data = null) {
       renderSupervisors();
       updateDashboardStats();
       toast(isEdit ? 'تم تحديث الفاعلية' : 'تم إنشاء الفاعلية بنجاح');
-      Supabase.syncEvent(isEdit ? ev : state.events[state.events.length - 1]);
+      Supabase.syncEvent(isEdit ? ev : state.events[0]);
     };
   }
 
@@ -2265,10 +2284,11 @@ function openForm(type, data = null) {
       const reasonVal = $('#banReason').value.trim();
 
       const newId = Math.max(0, ...state.bans.map(x => x.id)) + 1;
-      state.bans.unshift({
+      const newBan = {
         id: newId,
         studentId: student.id,
         name: student.name,
+        student: student.name,
         faculty: student.faculty,
         national: student.national,
         type: typeVal,
@@ -2277,7 +2297,8 @@ function openForm(type, data = null) {
         by: byVal,
         reason: reasonVal,
         active: true
-      });
+      };
+      state.bans.unshift(newBan);
 
       student.status = 'محظور';
       Storage.saveAll();
@@ -2286,6 +2307,8 @@ function openForm(type, data = null) {
       renderStudents();
       updateDashboardStats();
       toast(`تم تسجيل قرار الحظر للطالب "${student.name}"`);
+      Supabase.syncBan(newBan);
+      Supabase.syncStudent(student);
     };
   }
 
@@ -5188,7 +5211,60 @@ function init() {
     Supabase.pullAll().then(() => updateCloudBadge()).catch(e => console.warn('Supabase initial pull:', e));
   }
 
+  // Progressive Web App (PWA) Install Handling
+  initPwaInstall();
+
   iconRefresh();
+}
+
+let deferredPrompt = null;
+function initPwaInstall() {
+  const installBtn = $('#pwaInstallBtn');
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (isStandalone) {
+    if (installBtn) installBtn.style.display = 'none';
+    return;
+  }
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.style.display = 'inline-flex';
+  });
+
+  // If on iOS Safari, surface the button so user can see install steps:
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  if (isIOS && installBtn) {
+    installBtn.style.display = 'inline-flex';
+  }
+
+  if (installBtn) {
+    installBtn.onclick = async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          installBtn.style.display = 'none';
+          toast('تم تثبيت المنظومة على جهازك بنجاح! 🎉');
+        }
+        deferredPrompt = null;
+      } else {
+        alert('لتثبيت تطبيق المنظومة على جهازك:\n\n📱 على iPhone (Safari):\nاضغط على زر المشاركة (Share) بالأسفل ثم اختر «إضافة إلى الشاشة الرئيسية» (Add to Home Screen).\n\n💻 على الكمبيوتر أو أندرويد (Chrome/Edge):\nاضغط على أيقونة التثبيت بأعلى شريط العنوان أو من قائمة المتصفح (Install App).');
+      }
+    };
+  }
+
+  window.addEventListener('appinstalled', () => {
+    if (installBtn) installBtn.style.display = 'none';
+    toast('تم تثبيت تطبيق المنظومة الرسمي بنجاح!');
+  });
+
+  // Register PWA Service Worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(err => {
+      console.warn('PWA Service Worker registration warning:', err);
+    });
+  }
 }
 
 function updateCloudBadge() {
