@@ -33,6 +33,7 @@
         <button class="nav-item active" data-page="dashboard"><i data-lucide="layout-dashboard"></i><span>لوحة التحكم</span></button>
         <button class="nav-item" data-page="students"><i data-lucide="users"></i><span>الطلاب</span></button>
         <button class="nav-item" data-page="events"><i data-lucide="calendar-days"></i><span>الفاعليات</span></button>
+        <button class="nav-item" data-page="reports"><i data-lucide="file-text"></i><span>تقارير الفاعليات</span></button>
         <button class="nav-item" data-page="supervisors"><i data-lucide="user-check"></i><span>هيئة الإشراف</span></button>
         <button class="nav-item" data-page="import"><i data-lucide="file-up"></i><span>استيراد Excel</span></button>
         <button class="nav-item" data-page="bans"><i data-lucide="shield-alert"></i><span>المحظورون</span></button>
@@ -139,6 +140,153 @@
         <section class="page" id="events">
           <div class="page-heading"><div><p class="kicker">إدارة الفاعليات</p><h2>الفاعليات</h2><p>تفاصيل الحضور وهيئة الإشراف والتقارير.</p></div><button class="btn primary" data-open="newEvent"><i data-lucide="plus"></i> فاعلية جديدة</button></div>
           <div class="event-cards" id="eventsGrid"></div>
+        </section>
+
+        <!-- صفحة تقرير الفاعلية المعتمد (A4 Portrait) -->
+        <section class="page" id="reports">
+          <div class="page-heading">
+            <div>
+              <p class="kicker">التوثيق الإداري والتقارير المعتمدة</p>
+              <h2>تقرير الفاعلية الرسمي</h2>
+              <p>توليد وتوثيق تقارير الفاعليات بنموذج إدارة اتحاد طلاب الجامعة مع إرفاق الصور وتصدير Word و PDF طبق الأصل.</p>
+            </div>
+            <div class="heading-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn secondary" id="btnPrintReportPdf" style="display:inline-flex;align-items:center;gap:6px;font-weight:700">
+                <i data-lucide="printer"></i>
+                <span>طباعة / حفظ PDF</span>
+              </button>
+              <button class="btn primary" id="btnExportReportWord" style="display:inline-flex;align-items:center;gap:6px;font-weight:700">
+                <i data-lucide="file-text"></i>
+                <span>تصدير Word (.doc)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- شريط أدوات التحكم واختيار الفاعلية والصور -->
+          <div class="panel report-toolbar no-print">
+            <div class="report-toolbar-grid">
+              <div>
+                <label for="reportEventSelector" class="report-label">
+                  <i data-lucide="calendar"></i>
+                  <span>اختر الفاعلية لتعبئة التقرير تلقائياً:</span>
+                </label>
+                <select id="reportEventSelector" class="report-select">
+                  <option value="">-- اختر فاعلية لتعبئة بيانات التقرير --</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="report-label">
+                  <i data-lucide="camera"></i>
+                  <span>إرفاق صور توثيق الفاعلية (حتى 4 صور):</span>
+                </label>
+                <div style="display:flex;gap:8px">
+                  <label class="btn secondary upload-btn-label">
+                    <i data-lucide="upload"></i>
+                    <span>اختر صوراً من جهازك</span>
+                    <input type="file" id="reportImagesUpload" accept="image/*" multiple style="display:none">
+                  </label>
+                  <button type="button" class="btn ghost danger-btn" id="btnClearReportImages" title="مسح الصور المرفقة">
+                    <i data-lucide="trash-2"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div style="display:flex;gap:8px;align-items:flex-end">
+                <button type="button" class="btn ghost reset-btn" id="btnResetReportForm">
+                  <i data-lucide="rotate-ccw"></i>
+                  <span>إعادة تعيين البيانات للوضع الافتراضي</span>
+                </button>
+              </div>
+            </div>
+            <div class="report-tip">
+              <i data-lucide="info"></i>
+              <span>💡 يمكنك التعديل والكتابة بحرية داخل أي خلية أو نص في ورقة التقرير بالأسفل (Live Editable) قبل التصدير.</span>
+            </div>
+          </div>
+
+          <!-- ورقة التقرير الرسمية A4 بورتيريه -->
+          <div class="report-paper-container">
+            <div class="report-a4-sheet" id="reportA4Sheet">
+              <!-- ترويسة التقرير الرسمية -->
+              <header class="rep-header">
+                <div class="rep-header-right">
+                  <img src="assets/alexandria-university.png" alt="شعار جامعة الإسكندرية" class="rep-header-logo">
+                  <div class="rep-header-titles">
+                    <strong>جامعة الإسكندرية</strong>
+                    <span>الإدارة العامة لرعاية الشباب</span>
+                    <span>إدارة اتحاد طلاب الجامعة</span>
+                  </div>
+                </div>
+
+                <div class="rep-header-center">
+                  <h1 class="rep-main-title">تـقـــرير</h1>
+                  <h2 class="rep-sub-title" contenteditable="true" id="repSubTitle">إدارة اتحاد طلاب الجامعة</h2>
+                </div>
+
+                <div class="rep-header-left">
+                  <img src="assets/student-union.png" alt="شعار اتحاد طلاب جامعة الإسكندرية" class="rep-header-logo">
+                  <div class="rep-header-titles">
+                    <strong>اتحاد الطلاب</strong>
+                    <span>جامعة الإسكندرية</span>
+                    <span id="repAcademicYear">العام الجامعي 2026 / 2027</span>
+                  </div>
+                </div>
+              </header>
+
+              <!-- جدول الفاعلية الرسمي المعتمد من ملف الورد -->
+              <div class="rep-table-wrap">
+                <table class="rep-table" id="reportOfficialTable">
+                  <thead>
+                    <tr>
+                      <th rowspan="2" class="th-committee">اللجنة</th>
+                      <th rowspan="2" class="th-desc">وصف تفصيلي للنشاط</th>
+                      <th colspan="2" class="th-beneficiaries">عدد المستفيدين</th>
+                      <th rowspan="2" class="th-place">مكان التنفيذ</th>
+                      <th colspan="2" class="th-date">تاريخ التنفيذ</th>
+                    </tr>
+                    <tr class="sub-row">
+                      <th class="th-sub">طلبة</th>
+                      <th class="th-sub">طالبات</th>
+                      <th class="th-sub">بدء النشاط</th>
+                      <th class="th-sub">انتهاء النشاط</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="td-committee" contenteditable="true" id="cellCommittee">اتحاد طلاب الجامعة</td>
+                      <td class="td-desc" contenteditable="true" id="cellDescription">اكتب هنا الوصف التفصيلي وأهداف ومحاور الفاعلية المنفذة...</td>
+                      <td class="td-num" contenteditable="true" id="cellMales">0</td>
+                      <td class="td-num" contenteditable="true" id="cellFemales">0</td>
+                      <td class="td-place" contenteditable="true" id="cellPlace">مركز المؤتمرات - سموحة</td>
+                      <td class="td-date" contenteditable="true" id="cellStartDate">--</td>
+                      <td class="td-date" contenteditable="true" id="cellEndDate">--</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- قسم توثيق الصور المرفقة للفاعلية -->
+              <div class="rep-photos-wrapper" id="reportPhotosSection">
+                <div class="rep-photos-title">
+                  <i data-lucide="camera"></i>
+                  <span>جانب من التوثيق الفوتوغرافي لفاعليات النشاط:</span>
+                </div>
+                <div class="rep-photos-grid" id="reportPhotosGrid">
+                  <!-- تظهر الصور المرفقة هنا -->
+                </div>
+              </div>
+
+              <!-- تذييل التقرير والتوقيع المعتمد -->
+              <footer class="rep-footer">
+                <div class="rep-signature-box">
+                  <strong class="rep-sig-role" contenteditable="true" id="repSigRole">مشرف عام الاتحاد</strong>
+                  <div class="rep-sig-space"></div>
+                  <strong class="rep-sig-name" contenteditable="true" id="repSigName">أ / محمد فوزي</strong>
+                </div>
+              </footer>
+            </div>
+          </div>
         </section>
 
         <section class="page" id="supervisors">
@@ -315,6 +463,7 @@
       <button class="icon-btn" id="closeBottomSheet" aria-label="إغلاق"><i data-lucide="x"></i></button>
     </div>
     <div class="bottom-sheet-grid">
+      <button class="bottom-sheet-btn" data-page="reports"><i data-lucide="file-text"></i><span>تقارير الفاعليات</span></button>
       <button class="bottom-sheet-btn" data-page="supervisors"><i data-lucide="user-check"></i><span>هيئة الإشراف</span></button>
       <button class="bottom-sheet-btn" data-page="bans"><i data-lucide="shield-alert"></i><span>المحظورون</span></button>
       <button class="bottom-sheet-btn" data-page="entities"><i data-lucide="network"></i><span>الكيانات</span></button>

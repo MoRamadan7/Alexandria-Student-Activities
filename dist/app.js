@@ -1,7 +1,7 @@
 /**
- * Alexandria University Student Union - Student Activities Database
- * Official Frontend Application Engine (Updated with Supervisors & Modern UX)
- */
+* Alexandria University Student Union - Student Activities Database
+* Official Frontend Application Engine (Updated with Supervisors & Modern UX)
+*/
 
 // 1. Reference Data: Alexandria University 21 Faculties
 const faculties = [
@@ -15,20 +15,20 @@ const faculties = [
 
 // 2. Common Faculty Aliases & Dialect Mapping
 const facultyAliases = {
-  'اداب':'الآداب', 'الاداب':'الآداب', 'سياحه':'السياحة والفنادق', 'سياحه وفنادق':'السياحة والفنادق', 'السياحه والفنادق':'السياحة والفنادق',
-  'تجاره':'الأعمال', 'التجارة':'الأعمال', 'تجارة':'الأعمال', 'اعمال':'الأعمال', 'كليه الاعمال':'الأعمال', 'الأعمال والتجارة':'الأعمال',
-  'هندسه':'الهندسة', 'الهندسه':'الهندسة', 'زراعه الشاطبي':'زراعة الشاطبي', 'زراعه سابا باشا':'زراعة سابا باشا', 'زراعة ساباباشا':'زراعة سابا باشا',
-  'طفوله':'التربية للطفولة المبكرة', 'تربيه طفوله':'التربية للطفولة المبكرة', 'تربية طفولة':'التربية للطفولة المبكرة', 'طفولة مبكرة':'التربية للطفولة المبكرة',
-  'تربيه نوعيه':'التربية النوعية', 'تربية نوعية':'التربية النوعية', 'نوعية':'التربية النوعية',
-  'تربيه رياضيه':'علوم الرياضة بنين', 'تربية رياضية':'علوم الرياضة بنين', 'علوم رياضه':'علوم الرياضة بنين', 'رياضة بنين':'علوم الرياضة بنين', 'رياضة بنات':'علوم الرياضة بنات',
-  'بطري':'الطب البيطري', 'طب بطري':'الطب البيطري', 'بيطري':'الطب البيطري', 'البيطري':'الطب البيطري',
-  'اسنان':'طب الأسنان', 'الاسنان':'طب الأسنان', 'طب اسنان':'طب الأسنان',
-  'طب':'الطب البشري', 'بشري':'الطب البشري', 'الطب':'الطب البشري',
-  'حاسبات':'الحاسبات وعلوم البيانات', 'حاسبات ومعلومات':'الحاسبات وعلوم البيانات', 'حاسبات وعلوم البيانات':'الحاسبات وعلوم البيانات', 'حاسبات وذكاء اصطناعي':'الحاسبات وعلوم البيانات',
-  'سياسه واقتصاد':'الدراسات الاقتصادية والعلوم السياسية', 'سياسة واقتصاد':'الدراسات الاقتصادية والعلوم السياسية', 'اقتصاد وعلوم سياسيه':'الدراسات الاقتصادية والعلوم السياسية', 'اقتصاد وعلوم سياسية':'الدراسات الاقتصادية والعلوم السياسية',
-  'فنون جميله':'الفنون الجميلة', 'فنون جميلة':'الفنون الجميلة', 'الفنون جميله':'الفنون الجميلة',
-  'صيدله':'الصيدلة', 'الصيدله':'الصيدلة', 'تمريض':'التمريض', 'التمريض':'التمريض',
-  'حقوق':'الحقوق', 'الحقوق':'الحقوق', 'علوم':'العلوم', 'العلوم':'العلوم', 'تربيه':'التربية', 'التربيه':'التربية'
+  'اداب': 'الآداب', 'الاداب': 'الآداب', 'سياحه': 'السياحة والفنادق', 'سياحه وفنادق': 'السياحة والفنادق', 'السياحه والفنادق': 'السياحة والفنادق',
+  'تجاره': 'الأعمال', 'التجارة': 'الأعمال', 'تجارة': 'الأعمال', 'اعمال': 'الأعمال', 'كليه الاعمال': 'الأعمال', 'الأعمال والتجارة': 'الأعمال',
+  'هندسه': 'الهندسة', 'الهندسه': 'الهندسة', 'زراعه الشاطبي': 'زراعة الشاطبي', 'زراعه سابا باشا': 'زراعة سابا باشا', 'زراعة ساباباشا': 'زراعة سابا باشا',
+  'طفوله': 'التربية للطفولة المبكرة', 'تربيه طفوله': 'التربية للطفولة المبكرة', 'تربية طفولة': 'التربية للطفولة المبكرة', 'طفولة مبكرة': 'التربية للطفولة المبكرة',
+  'تربيه نوعيه': 'التربية النوعية', 'تربية نوعية': 'التربية النوعية', 'نوعية': 'التربية النوعية',
+  'تربيه رياضيه': 'علوم الرياضة بنين', 'تربية رياضية': 'علوم الرياضة بنين', 'علوم رياضه': 'علوم الرياضة بنين', 'رياضة بنين': 'علوم الرياضة بنين', 'رياضة بنات': 'علوم الرياضة بنات',
+  'بطري': 'الطب البيطري', 'طب بطري': 'الطب البيطري', 'بيطري': 'الطب البيطري', 'البيطري': 'الطب البيطري',
+  'اسنان': 'طب الأسنان', 'الاسنان': 'طب الأسنان', 'طب اسنان': 'طب الأسنان',
+  'طب': 'الطب البشري', 'بشري': 'الطب البشري', 'الطب': 'الطب البشري',
+  'حاسبات': 'الحاسبات وعلوم البيانات', 'حاسبات ومعلومات': 'الحاسبات وعلوم البيانات', 'حاسبات وعلوم البيانات': 'الحاسبات وعلوم البيانات', 'حاسبات وذكاء اصطناعي': 'الحاسبات وعلوم البيانات',
+  'سياسه واقتصاد': 'الدراسات الاقتصادية والعلوم السياسية', 'سياسة واقتصاد': 'الدراسات الاقتصادية والعلوم السياسية', 'اقتصاد وعلوم سياسيه': 'الدراسات الاقتصادية والعلوم السياسية', 'اقتصاد وعلوم سياسية': 'الدراسات الاقتصادية والعلوم السياسية',
+  'فنون جميله': 'الفنون الجميلة', 'فنون جميلة': 'الفنون الجميلة', 'الفنون جميله': 'الفنون الجميلة',
+  'صيدله': 'الصيدلة', 'الصيدله': 'الصيدلة', 'تمريض': 'التمريض', 'التمريض': 'التمريض',
+  'حقوق': 'الحقوق', 'الحقوق': 'الحقوق', 'علوم': 'العلوم', 'العلوم': 'العلوم', 'تربيه': 'التربية', 'التربيه': 'التربية'
 };
 
 // 3. Egyptian Governorates by Code (Digits 8 & 9 in Egyptian National ID)
@@ -585,6 +585,9 @@ function navigate(id) {
   const sheet = $('#moreBottomSheet');
   if (sheet) sheet.classList.remove('show');
   closeDropdowns();
+  if (id === 'reports' && typeof populateReportEvents === 'function') {
+    populateReportEvents();
+  }
   window.scrollTo({ top: 0, behavior: 'smooth' });
   iconRefresh();
 }
@@ -702,7 +705,7 @@ function renderNotifications() {
       icon: 'calendar-check',
       title: `فاعلية: ${safe(e.title)}`,
       time: e.date,
-      desc: `حضر ${ (e.attendeeIds || []).length } طالب مسجل`
+      desc: `حضر ${(e.attendeeIds || []).length} طالب مسجل`
     });
   });
   state.bans.filter(b => b.active !== false).slice(0, 2).forEach(b => {
@@ -773,7 +776,7 @@ function showFacultyReportModal() {
     state.students.filter(s => state.events.some(e => (e.attendeeIds || []).includes(s.id))).map(s => s.id)
   ).size;
   const topFaculty = activeFaculties[0] || null;
-  const avgRate = activeFaculties.length > 0 
+  const avgRate = activeFaculties.length > 0
     ? (activeFaculties.reduce((sum, f) => sum + f.rate, 0) / activeFaculties.length).toFixed(1)
     : '0.0';
 
@@ -1093,7 +1096,8 @@ function renderEvents() {
           <p>${safe(supsText)}</p>
         </div>
         <div class="event-actions">
-          <button class="btn secondary" data-event-view="${e.id}"><i data-lucide="layout-grid"></i> مساحة التحضير</button>
+          <button class="btn secondary" data-event-view="${e.id}"><i data-lucide="layout-grid"></i> التحضير</button>
+          <button class="btn secondary" data-event-report="${e.id}" style="background:#eef6fc;color:var(--primary);border-color:#b9d9f2"><i data-lucide="file-check"></i> تقرير الفاعلية</button>
           <button class="btn primary" data-export-word="${e.id}"><i data-lucide="file-text"></i> كشف Word</button>
         </div>
       </div>
@@ -1110,6 +1114,14 @@ function renderEvents() {
   `;
 
   $$('[data-event-view]').forEach(b => b.onclick = () => showEvent(state.events.find(e => e.id == b.dataset.eventView)));
+  $$('[data-event-report]').forEach(b => b.onclick = () => {
+    navigate('reports');
+    const selector = $('#reportEventSelector');
+    if (selector) {
+      selector.value = b.dataset.eventReport;
+      if (typeof loadEventIntoReport === 'function') loadEventIntoReport(b.dataset.eventReport);
+    }
+  });
   $$('[data-export-word]').forEach(b => b.onclick = () => exportEventWord(state.events.find(e => e.id == b.dataset.exportWord)));
   $$('[data-edit-event]').forEach(b => b.onclick = () => openForm('editEvent', state.events.find(e => e.id == b.dataset.editEvent)));
   $$('[data-delete-event]').forEach(b => b.onclick = () => deleteEvent(b.dataset.deleteEvent));
@@ -1354,7 +1366,7 @@ function renderSupervisors(list = state.supervisors) {
   if (roleFilter) {
     const currentVal = roleFilter.value;
     const roles = [...new Set(state.supervisors.map(s => s.role).filter(Boolean))];
-    roleFilter.innerHTML = '<option value="">كل المسميات الوظيفية</option>' + 
+    roleFilter.innerHTML = '<option value="">كل المسميات الوظيفية</option>' +
       roles.map(r => `<option value="${safe(r)}" ${r === currentVal ? 'selected' : ''}>${safe(r)}</option>`).join('');
   }
 
@@ -1374,7 +1386,7 @@ function showSupervisorEvents(supervisor) {
       <div class="date-tile"><strong>${e.day || '15'}</strong><span>${e.month || 'نوفمبر'}</span></div>
       <div>
         <h4>${safe(e.title)}</h4>
-        <p><span>📍 ${safe(e.place)}</span><span>👥 ${ (e.attendeeIds || []).length } حاضر</span></p>
+        <p><span>📍 ${safe(e.place)}</span><span>👥 ${(e.attendeeIds || []).length} حاضر</span></p>
       </div>
       <button class="btn ghost" style="min-height:32px;font-size:11px" data-view-from-sup="${e.id}">عرض الفاعلية</button>
     </div>
@@ -1698,7 +1710,7 @@ function getSavedSupervisorRoles() {
   let list = [];
   try {
     list = JSON.parse(localStorage.getItem('alex_custom_supervisor_roles') || '[]');
-  } catch (e) {}
+  } catch (e) { }
   if (typeof state !== 'undefined' && state.supervisors) {
     state.supervisors.forEach(s => {
       if (s.role && !list.includes(s.role)) list.push(s.role);
@@ -1713,12 +1725,12 @@ function saveCustomSupervisorRole(role) {
   let list = [];
   try {
     list = JSON.parse(localStorage.getItem('alex_custom_supervisor_roles') || '[]');
-  } catch (e) {}
+  } catch (e) { }
   if (!list.includes(clean)) {
     list.push(clean);
     try {
       localStorage.setItem('alex_custom_supervisor_roles', JSON.stringify(list));
-    } catch (e) {}
+    } catch (e) { }
   }
 }
 
@@ -2522,14 +2534,14 @@ function getSavedWordTemplates() {
   try {
     const list = JSON.parse(localStorage.getItem('alex_word_saved_templates') || '[]');
     if (list && list.length > 0) return list;
-  } catch (e) {}
+  } catch (e) { }
   return JSON.parse(JSON.stringify(DEFAULT_TEMPLATES_COLLECTION));
 }
 
 function saveWordTemplates(list) {
   try {
     localStorage.setItem('alex_word_saved_templates', JSON.stringify(list));
-  } catch (e) {}
+  } catch (e) { }
 }
 
 function buildWordDocHTML(cfg) {
@@ -5024,6 +5036,494 @@ function toast(msg) {
   toast.timer = setTimeout(() => t.classList.remove('show'), 3500);
 }
 
+// 20. Official Event Report Engine (A4 Portrait, Word .doc & PDF Export)
+// ==========================================================================
+let reportPhotos = []; // [{ id, dataUrl, caption }]
+let selectedReportEventId = null;
+
+function initReportPage() {
+  const selector = $('#reportEventSelector');
+  const uploadInput = $('#reportImagesUpload');
+  const clearBtn = $('#btnClearReportImages');
+  const resetBtn = $('#btnResetReportForm');
+  const wordBtn = $('#btnExportReportWord');
+  const pdfBtn = $('#btnPrintReportPdf');
+
+  if (selector) {
+    selector.onchange = () => {
+      const evId = selector.value;
+      if (evId) loadEventIntoReport(evId);
+    };
+  }
+
+  if (uploadInput) {
+    uploadInput.onchange = (e) => {
+      const files = e.target.files;
+      if (files && files.length) {
+        handleReportImageUpload(files);
+      }
+      uploadInput.value = '';
+    };
+  }
+
+  if (clearBtn) {
+    clearBtn.onclick = () => {
+      if (reportPhotos.length === 0) return;
+      if (confirm('هل أنت متأكد من مسح جميع الصور المرفقة بالتقرير؟')) {
+        reportPhotos = [];
+        renderReportPhotos();
+        toast('تم مسح الصور المرفقة بالتقرير');
+      }
+    };
+  }
+
+  if (resetBtn) {
+    resetBtn.onclick = () => {
+      if (confirm('هل ترغب في إعادة تعيين كافة بيانات التقرير للوضع الافتراضي؟')) {
+        resetReportData();
+        toast('تمت إعادة تعيين التقرير');
+      }
+    };
+  }
+
+  if (wordBtn) {
+    wordBtn.onclick = () => exportReportToWord();
+  }
+
+  if (pdfBtn) {
+    pdfBtn.onclick = () => printReportPdf();
+  }
+
+  populateReportEvents();
+  renderReportPhotos();
+}
+
+function populateReportEvents() {
+  const selector = $('#reportEventSelector');
+  if (!selector) return;
+  const currentVal = selector.value;
+  const evs = state.events || [];
+
+  let optionsHtml = '<option value="">-- اختر فاعلية لتعبئة بيانات التقرير تلقائياً --</option>';
+  evs.forEach(e => {
+    const attendeesCount = (e.attendeeIds || []).length;
+    optionsHtml += `<option value="${e.id}" ${String(e.id) === String(currentVal) ? 'selected' : ''}>${safe(e.title)} (${safe(e.date)}) - [${attendeesCount} طالب مسجل]</option>`;
+  });
+  selector.innerHTML = optionsHtml;
+}
+
+function loadEventIntoReport(eventId) {
+  const ev = (state.events || []).find(e => String(e.id) === String(eventId));
+  if (!ev) return;
+  selectedReportEventId = ev.id;
+
+  // 1. Committee / Organizer
+  const cellCommittee = $('#cellCommittee');
+  if (cellCommittee) cellCommittee.innerText = ev.organizer || 'اتحاد طلاب الجامعة';
+
+  // 2. Detailed Description
+  const cellDescription = $('#cellDescription');
+  if (cellDescription) {
+    cellDescription.innerText = `${ev.title}، المنفذ بواسطة ${ev.organizer || 'اتحاد طلاب الجامعة'} بمقر (${ev.place || 'جامعة الإسكندرية'}) لخدمة وتأهيل طلاب كليات الجامعة.`;
+  }
+
+  // 3. Place
+  const cellPlace = $('#cellPlace');
+  if (cellPlace) cellPlace.innerText = ev.place || 'جامعة الإسكندرية';
+
+  // 4. Dates
+  const cellStartDate = $('#cellStartDate');
+  const cellEndDate = $('#cellEndDate');
+
+  let startStr = ev.date || '--';
+  let endStr = ev.date || '--';
+
+  const rangeMatch = (ev.date || '').match(/(\d+)\s*[-–]\s*(\d+)\s+([^\d]+)\s*(\d*)/);
+  if (rangeMatch) {
+    const d1 = rangeMatch[1];
+    const d2 = rangeMatch[2];
+    const month = rangeMatch[3].trim();
+    const year = rangeMatch[4] ? rangeMatch[4].trim() : '2026';
+    startStr = `${d1} ${month} ${year}`;
+    endStr = `${d2} ${month} ${year}`;
+  } else if (ev.day && ev.month) {
+    startStr = `${ev.day} ${ev.month} 2026`;
+    endStr = `${ev.day} ${ev.month} 2026`;
+  }
+
+  if (cellStartDate) cellStartDate.innerText = startStr;
+  if (cellEndDate) cellEndDate.innerText = endStr;
+
+  // 5. Beneficiaries Count (Males / Females)
+  let males = 0;
+  let females = 0;
+  const attendees = (state.students || []).filter(s => (ev.attendeeIds || []).includes(s.id));
+
+  if (attendees.length > 0) {
+    attendees.forEach(s => {
+      const p = (typeof parseEgyptianNationalID === 'function') ? parseEgyptianNationalID(s.national) : {};
+      if (p.gender === 'طالبة' || p.gender === 'أنثى') {
+        females++;
+      } else {
+        males++;
+      }
+    });
+  } else {
+    const target = ev.registered || 0;
+    if (target > 0) {
+      males = Math.ceil(target / 2);
+      females = Math.floor(target / 2);
+    }
+  }
+
+  const cellMales = $('#cellMales');
+  const cellFemales = $('#cellFemales');
+  if (cellMales) cellMales.innerText = males.toLocaleString('ar-EG');
+  if (cellFemales) cellFemales.innerText = females.toLocaleString('ar-EG');
+
+  // 6. Sub title
+  const repSubTitle = $('#repSubTitle');
+  if (repSubTitle) repSubTitle.innerText = `إدارة اتحاد طلاب الجامعة - لجنة ${ev.organizer || 'الأنشطة'}`;
+
+  toast(`تم سحب وتعبئة بيانات فاعلية «${ev.title}» بنجاح في التقرير`);
+}
+
+function handleReportImageUpload(files) {
+  const maxPhotos = 4;
+  const remainingSlots = maxPhotos - reportPhotos.length;
+  if (remainingSlots <= 0) {
+    alert('يمكن إرفاق 4 صور كحد أقصى للتقرير حتى يتسع النموذج في ورقة A4 واحدة.');
+    return;
+  }
+
+  const filesToProcess = Array.from(files).slice(0, remainingSlots);
+  let loadedCount = 0;
+
+  filesToProcess.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const rawDataUrl = e.target.result;
+      compressReportImage(rawDataUrl, 900, 650, (compressedDataUrl) => {
+        reportPhotos.push({
+          id: Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          dataUrl: compressedDataUrl,
+          caption: `فاعلية النشاط - صورة ${reportPhotos.length + 1}`
+        });
+        loadedCount++;
+        if (loadedCount === filesToProcess.length) {
+          renderReportPhotos();
+          toast(`تم إرفاق ${loadedCount} صورة بنجاح في التقرير`);
+        }
+      });
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function compressReportImage(srcDataUrl, maxW, maxH, callback) {
+  const img = new Image();
+  img.onload = () => {
+    let w = img.width;
+    let h = img.height;
+    if (w > maxW || h > maxH) {
+      const ratio = Math.min(maxW / w, maxH / h);
+      w = Math.round(w * ratio);
+      h = Math.round(h * ratio);
+    }
+    const canvas = document.createElement('canvas');
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, w, h);
+    const compressed = canvas.toDataURL('image/jpeg', 0.82);
+    callback(compressed);
+  };
+  img.src = srcDataUrl;
+}
+
+function renderReportPhotos() {
+  const grid = $('#reportPhotosGrid');
+  if (!grid) return;
+
+  if (reportPhotos.length === 0) {
+    grid.className = 'rep-photos-grid';
+    grid.innerHTML = `
+      <div class="rep-photo-empty-box">
+        <i data-lucide="image"></i>
+        <strong>لا توجد صور مرفقة حالياً</strong>
+        <span>اضغط على زر «اختر صوراً من جهازك» بالأعلى لإرفاق حتى 4 صور من الفاعلية</span>
+      </div>
+    `;
+    iconRefresh();
+    return;
+  }
+
+  grid.className = 'rep-photos-grid' + (reportPhotos.length === 1 ? ' single' : '');
+  grid.innerHTML = reportPhotos.map((p, idx) => `
+    <div class="rep-photo-card" data-photo-id="${p.id}">
+      <button type="button" class="rep-photo-del" title="حذف الصورة" onclick="deleteReportPhoto('${p.id}')">
+        <i data-lucide="x"></i>
+      </button>
+      <img src="${p.dataUrl}" alt="صورة الفاعلية ${idx + 1}" class="rep-photo-img">
+      <div class="rep-photo-caption" contenteditable="true" onblur="updateReportPhotoCaption('${p.id}', this.innerText)">
+        ${safe(p.caption)}
+      </div>
+    </div>
+  `).join('');
+
+  iconRefresh();
+}
+
+window.deleteReportPhoto = function(photoId) {
+  reportPhotos = reportPhotos.filter(p => p.id !== photoId);
+  renderReportPhotos();
+  toast('تمت إزالة الصورة من التقرير');
+};
+
+window.updateReportPhotoCaption = function(photoId, newCaption) {
+  const p = reportPhotos.find(x => x.id === photoId);
+  if (p) p.caption = newCaption.trim();
+};
+
+function resetReportData() {
+  selectedReportEventId = null;
+  const selector = $('#reportEventSelector');
+  if (selector) selector.value = '';
+
+  const cellCommittee = $('#cellCommittee');
+  if (cellCommittee) cellCommittee.innerText = 'اتحاد طلاب الجامعة';
+
+  const cellDescription = $('#cellDescription');
+  if (cellDescription) cellDescription.innerText = 'اكتب هنا الوصف التفصيلي وأهداف ومحاور الفاعلية المنفذة...';
+
+  const cellMales = $('#cellMales');
+  if (cellMales) cellMales.innerText = '0';
+
+  const cellFemales = $('#cellFemales');
+  if (cellFemales) cellFemales.innerText = '0';
+
+  const cellPlace = $('#cellPlace');
+  if (cellPlace) cellPlace.innerText = 'مركز المؤتمرات - سموحة';
+
+  const cellStartDate = $('#cellStartDate');
+  if (cellStartDate) cellStartDate.innerText = '--';
+
+  const cellEndDate = $('#cellEndDate');
+  if (cellEndDate) cellEndDate.innerText = '--';
+
+  const repSubTitle = $('#repSubTitle');
+  if (repSubTitle) repSubTitle.innerText = 'إدارة اتحاد طلاب الجامعة';
+
+  const repSigRole = $('#repSigRole');
+  if (repSigRole) repSigRole.innerText = 'مشرف عام الاتحاد';
+
+  const repSigName = $('#repSigName');
+  if (repSigName) repSigName.innerText = 'أ / محمد فوزي';
+
+  reportPhotos = [];
+  renderReportPhotos();
+}
+
+function exportReportToWord() {
+  toast('جاري إنشاء وتجهيز ملف Word الرسمي للتقرير...');
+
+  const reportData = {
+    subTitle: ($('#repSubTitle') ? $('#repSubTitle').innerText.trim() : 'إدارة اتحاد طلاب الجامعة'),
+    committee: ($('#cellCommittee') ? $('#cellCommittee').innerText.trim() : 'اتحاد طلاب الجامعة'),
+    description: ($('#cellDescription') ? $('#cellDescription').innerText.trim() : ''),
+    males: ($('#cellMales') ? $('#cellMales').innerText.trim() : '0'),
+    females: ($('#cellFemales') ? $('#cellFemales').innerText.trim() : '0'),
+    place: ($('#cellPlace') ? $('#cellPlace').innerText.trim() : 'مركز المؤتمرات'),
+    startDate: ($('#cellStartDate') ? $('#cellStartDate').innerText.trim() : '--'),
+    endDate: ($('#cellEndDate') ? $('#cellEndDate').innerText.trim() : '--'),
+    sigRole: ($('#repSigRole') ? $('#repSigRole').innerText.trim() : 'مشرف عام الاتحاد'),
+    sigName: ($('#repSigName') ? $('#repSigName').innerText.trim() : 'أ / محمد فوزي'),
+    photos: reportPhotos
+  };
+
+  const wordHtml = buildEventReportWordDocHTML(reportData);
+  const cleanTitle = (`تقرير فاعلية - ${reportData.committee} - ${reportData.startDate}`).replace(/[\\/:*?"<>|]/g, '-');
+  downloadBlob(new Blob(['\ufeff', wordHtml], { type: 'application/msword;charset=utf-8' }), `${cleanTitle}.doc`);
+  toast('تم تحميل ملف Word بنجاح مع كافة الجداول والصور والتوقيعات');
+}
+
+function buildEventReportWordDocHTML(d) {
+  const uniLogo = (typeof window !== 'undefined' && window.APP_ASSETS && window.APP_ASSETS.uniLogo) || 'assets/alexandria-university.png';
+  const unionLogo = (typeof window !== 'undefined' && window.APP_ASSETS && window.APP_ASSETS.unionLogo) || 'assets/student-union.png';
+
+  let photosHtml = '';
+  if (d.photos && d.photos.length > 0) {
+    let rows = [];
+    for (let i = 0; i < d.photos.length; i += 2) {
+      const p1 = d.photos[i];
+      const p2 = d.photos[i + 1];
+
+      let rowHtml = '<tr>';
+      rowHtml += `
+        <td style="width:50%;text-align:center;vertical-align:top;padding:4pt;">
+          <img src="${p1.dataUrl}" style="width:100%;max-width:230pt;height:auto;border:1pt solid #cbd5e1;border-radius:4pt;display:block;margin:0 auto;">
+          <div style="font-size:8.5pt;color:#475569;margin-top:2pt;">${safe(p1.caption || '')}</div>
+        </td>
+      `;
+      if (p2) {
+        rowHtml += `
+          <td style="width:50%;text-align:center;vertical-align:top;padding:4pt;">
+            <img src="${p2.dataUrl}" style="width:100%;max-width:230pt;height:auto;border:1pt solid #cbd5e1;border-radius:4pt;display:block;margin:0 auto;">
+            <div style="font-size:8.5pt;color:#475569;margin-top:2pt;">${safe(p2.caption || '')}</div>
+          </td>
+        `;
+      } else {
+        rowHtml += '<td style="width:50%;"></td>';
+      }
+      rowHtml += '</tr>';
+      rows.push(rowHtml);
+    }
+
+    photosHtml = `
+      <div style="margin-top:12pt;margin-bottom:8pt;">
+        <div style="font-size:10.5pt;font-weight:bold;color:#073b67;margin-bottom:6pt;border-right:3pt solid #073b67;padding-right:6pt;">جانب من التوثيق الفوتوغرافي لفاعليات النشاط:</div>
+        <table border="0" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin:0 auto;">
+          ${rows.join('')}
+        </table>
+      </div>
+    `;
+  }
+
+  return `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>تقرير فاعلية معتمد</title>
+  <!--[if gte mso 9]>
+  <xml>
+    <w:WordDocument>
+      <w:View>Print</w:View>
+      <w:Zoom>100</w:Zoom>
+      <w:DoNotOptimizeForBrowser/>
+    </w:WordDocument>
+  </xml>
+  <![endif]-->
+  <style>
+    @page Section1 {
+      size: 595.3pt 841.9pt; /* A4 Portrait */
+      margin: 28pt 32pt 28pt 32pt;
+      mso-header-margin: 14pt;
+      mso-footer-margin: 14pt;
+      mso-page-orientation: portrait;
+    }
+    div.Section1 { page: Section1; }
+    body {
+      font-family: 'Arial', 'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif;
+      direction: rtl;
+      text-align: right;
+      color: #111827;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+    table { mso-displayed-decimal-separator: "."; mso-displayed-thousand-separator: ","; }
+  </style>
+</head>
+<body>
+<div class="Section1">
+  <!-- Header -->
+  <table border="0" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border-bottom:2pt solid #073b67;padding-bottom:8pt;margin-bottom:12pt;">
+    <tr>
+      <td style="width:33%;text-align:right;vertical-align:middle;">
+        <table border="0" cellpadding="0" cellspacing="0" style="border:0;">
+          <tr>
+            <td style="vertical-align:middle;padding-left:8pt;">
+              <img src="${uniLogo}" width="54" height="54" style="width:54px;height:54px;display:block;">
+            </td>
+            <td style="vertical-align:middle;line-height:1.25;">
+              <strong style="font-size:11.5pt;color:#073b67;display:block;">جامعة الإسكندرية</strong>
+              <span style="font-size:9pt;color:#4b5563;display:block;">الإدارة العامة لرعاية الشباب</span>
+              <span style="font-size:9pt;color:#4b5563;display:block;">إدارة اتحاد طلاب الجامعة</span>
+            </td>
+          </tr>
+        </table>
+      </td>
+      <td style="width:34%;text-align:center;vertical-align:middle;">
+        <div style="font-size:22pt;font-weight:bold;color:#073b67;letter-spacing:1.5pt;line-height:1.1;">تـقـــرير</div>
+        <div style="font-size:10.5pt;font-weight:bold;color:#1e3a5f;margin-top:2pt;">${safe(d.subTitle)}</div>
+      </td>
+      <td style="width:33%;text-align:left;vertical-align:middle;" dir="ltr">
+        <table border="0" cellpadding="0" cellspacing="0" style="border:0;float:right;" dir="rtl">
+          <tr>
+            <td style="vertical-align:middle;line-height:1.25;text-align:left;padding-left:8pt;">
+              <strong style="font-size:11.5pt;color:#073b67;display:block;">اتحاد الطلاب</strong>
+              <span style="font-size:9pt;color:#4b5563;display:block;">جامعة الإسكندرية</span>
+              <span style="font-size:8.5pt;color:#4b5563;display:block;">العام الجامعي 2026 / 2027</span>
+            </td>
+            <td style="vertical-align:middle;">
+              <img src="${unionLogo}" width="54" height="54" style="width:54px;height:54px;display:block;">
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <!-- Official Table -->
+  <table border="1" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;border:1.5pt solid #073b67;margin-top:8pt;margin-bottom:12pt;text-align:center;direction:rtl;">
+    <thead>
+      <tr style="background:#073b67;color:#ffffff;">
+        <th rowspan="2" style="width:16%;background:#073b67;color:#ffffff;border:1pt solid #1e3a5f;padding:6pt 4pt;font-size:10pt;font-weight:bold;text-align:center;vertical-align:middle;">اللجنة</th>
+        <th rowspan="2" style="width:33%;background:#073b67;color:#ffffff;border:1pt solid #1e3a5f;padding:6pt 4pt;font-size:10pt;font-weight:bold;text-align:center;vertical-align:middle;">وصف تفصيلي للنشاط</th>
+        <th colspan="2" style="width:16%;background:#073b67;color:#ffffff;border:1pt solid #1e3a5f;padding:6pt 4pt;font-size:10pt;font-weight:bold;text-align:center;vertical-align:middle;">عدد المستفيدين</th>
+        <th rowspan="2" style="width:17%;background:#073b67;color:#ffffff;border:1pt solid #1e3a5f;padding:6pt 4pt;font-size:10pt;font-weight:bold;text-align:center;vertical-align:middle;">مكان التنفيذ</th>
+        <th colspan="2" style="width:18%;background:#073b67;color:#ffffff;border:1pt solid #1e3a5f;padding:6pt 4pt;font-size:10pt;font-weight:bold;text-align:center;vertical-align:middle;">تاريخ التنفيذ</th>
+      </tr>
+      <tr style="background:#0b5aa5;color:#ffffff;">
+        <th style="width:8%;background:#0b5aa5;color:#ffffff;border:1pt solid #1e3a5f;padding:4pt 3pt;font-size:9.5pt;font-weight:bold;text-align:center;vertical-align:middle;">طلبة</th>
+        <th style="width:8%;background:#0b5aa5;color:#ffffff;border:1pt solid #1e3a5f;padding:4pt 3pt;font-size:9.5pt;font-weight:bold;text-align:center;vertical-align:middle;">طالبات</th>
+        <th style="width:9%;background:#0b5aa5;color:#ffffff;border:1pt solid #1e3a5f;padding:4pt 3pt;font-size:9pt;font-weight:bold;text-align:center;vertical-align:middle;">بدء النشاط</th>
+        <th style="width:9%;background:#0b5aa5;color:#ffffff;border:1pt solid #1e3a5f;padding:4pt 3pt;font-size:9pt;font-weight:bold;text-align:center;vertical-align:middle;">انتهاء النشاط</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="border:1pt solid #94a3b8;padding:8pt 5pt;font-size:9.5pt;font-weight:bold;text-align:center;vertical-align:middle;">${safe(d.committee)}</td>
+        <td style="border:1pt solid #94a3b8;padding:8pt 6pt;font-size:9pt;text-align:right;vertical-align:middle;line-height:1.35;">${safe(d.description)}</td>
+        <td style="border:1pt solid #94a3b8;padding:8pt 4pt;font-size:10.5pt;font-weight:bold;text-align:center;vertical-align:middle;">${safe(d.males)}</td>
+        <td style="border:1pt solid #94a3b8;padding:8pt 4pt;font-size:10.5pt;font-weight:bold;text-align:center;vertical-align:middle;">${safe(d.females)}</td>
+        <td style="border:1pt solid #94a3b8;padding:8pt 5pt;font-size:9.5pt;font-weight:bold;text-align:center;vertical-align:middle;">${safe(d.place)}</td>
+        <td style="border:1pt solid #94a3b8;padding:8pt 4pt;font-size:9pt;text-align:center;vertical-align:middle;">${safe(d.startDate)}</td>
+        <td style="border:1pt solid #94a3b8;padding:8pt 4pt;font-size:9pt;text-align:center;vertical-align:middle;">${safe(d.endDate)}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Photos Gallery -->
+  ${photosHtml}
+
+  <!-- Signatures -->
+  <table border="0" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;margin-top:18pt;page-break-inside:avoid;">
+    <tr>
+      <td style="width:35%;text-align:center;vertical-align:top;padding:6pt;">
+        <strong style="color:#073b67;font-size:11.5pt;display:block;margin-bottom:4pt;">${safe(d.sigRole)}</strong>
+        <div style="height:42pt;"></div>
+        <strong style="color:#111827;font-size:11.5pt;display:block;">${safe(d.sigName)}</strong>
+      </td>
+      <td style="width:65%;"></td>
+    </tr>
+  </table>
+</div>
+</body>
+</html>
+  `;
+}
+
+function printReportPdf() {
+  toast('جاري فتح نافذة الطباعة / حفظ بتنسيق PDF...');
+  setTimeout(() => {
+    window.print();
+  }, 250);
+}
+
 // 21. Application Bootstrap
 function init() {
   $('#facultyFilter').innerHTML += facultyOptions();
@@ -5033,6 +5533,7 @@ function init() {
   renderEntities();
   renderBans();
   renderUsers();
+  initReportPage();
   updateDashboardStats();
 
   // Navigation handlers
